@@ -3,13 +3,14 @@
 
 #include "AbstractFramework.h"
 #include "GlCamera.h"
-#include "GLMatrix.h"
-#include "GlQuaternion.h"
+#include "include/GLM/fwd.hpp"
+#include "include/GLM/glm.hpp"
 #include <QLinkedList>
 #include <QImage>
 #include <vector>
 #include <string>
 
+using namespace glm;
 
 class GlFramework : public AbstractFramework
 {
@@ -64,9 +65,9 @@ class GlFramework : public AbstractFramework
 
 
 	protected:
-		GLMatrix pProjMatrix, pViewMatrix, pModelMatrix;
-		GLMatrix pModelViewMatrix, pNormalMatrix, pMVPMatrix;
-		QLinkedList<GLMatrix> pMatrixStack;
+        mat4 pProjMatrix, pViewMatrix, pModelMatrix;
+        mat4 pModelViewMatrix, pNormalMatrix, pMVPMatrix;
+        QLinkedList<mat4> pMatrixStack;
 		std::vector<std::string> m_ShaderNames;
 		std::vector<GLint> m_Shader;
 		GLint m_CurrentShader;

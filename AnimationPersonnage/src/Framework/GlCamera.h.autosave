@@ -14,7 +14,7 @@ class GlCamera {
 protected:
 
     vec3<float32>  m_postion;
-    GlQuaternion m_Orientation;
+    quaternion m_Orientation;
     GLMatrix m_ViewMatrix, m_ProjectionMatrix;
     GLfloat ratio, FOVAngle, nearp, nearpf;
 
