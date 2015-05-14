@@ -143,58 +143,7 @@ compiler_clean:
 
 ####### Compile
 
-obj\main.obj: main.cpp C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QCoreApplication \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qglobal.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qconfig.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfeatures.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsystemdetection.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qprocessordetection.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcompilerdetection.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qtypeinfo.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qtypetraits.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsysinfo.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlogging.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qflags.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbasicatomic.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qgenericatomic.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_msvc.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_armv7.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_armv6.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_armv5.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_ia64.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_mips.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_x86.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_gcc.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qatomic_unix.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qglobalstatic.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmutex.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qnumeric.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstring.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qchar.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbytearray.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qrefcount.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qnamespace.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qarraydata.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringbuilder.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobject.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobjectdefs.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlist.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qalgorithms.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qiterator.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbytearraylist.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcoreevent.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qscopedpointer.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmetatype.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvarlengtharray.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcontainerfwd.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qisenum.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobject_impl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qeventloop.h
+obj\main.obj: main.cpp 
 
 ####### Install
 
