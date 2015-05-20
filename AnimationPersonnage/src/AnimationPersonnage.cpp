@@ -1,28 +1,23 @@
-﻿#define _USE_MATH_DEFINES
-#include <cmath>
-#include "TP01.h"
-#include <GlCamera.h>
+﻿#include "AnimationPersonnage.h"
+#include "Framework/GlCamera.h"
 #include "Shapes/Basis.h"
 #include "Shapes/Cubes.h"
-#include "Shapes/Pyramid.h"
-#include "Shapes/Cylinder.h"
-#include "Shapes/Star.h"
 #include "Shapes/BasisPlan.h"
 #include <iostream>
 
-using namespace std;
+using namespace glm;
 
-AbstractVec3<float32> mouse;
-AbstractVec3<float32> translateMouse;
-GLfloat shiftR = 0.0f;
-GLfloat shiftN = 0.0f;
-GLfloat rotateAngle = 0.0f;
-GLfloat rotateLeg = 0.0f;
-GLboolean rotateOrder = true;
-double eyeAngleR = 0;
-double eyeAngleU = 0;
+vec3<float32> mouse;
+vec3<float32> translateMouse;
+float32 shiftR = 0.0f;
+float32 shiftN = 0.0f;
+float32 rotateAngle = 0.0f;
+float32 rotateLeg = 0.0f;
+boolean rotateOrder = true;
+float32 eyeAngleR = 0;
+float32 eyeAngleU = 0;
 
-const GLfloat g_AngleSpeed = 10.0f;
+const float32 g_AngleSpeed = 10.0f;
 
 
 Basis* basis;
@@ -30,7 +25,7 @@ BasisPlan* basisPlan;
 TwoColorCube* cube;
 GlCamera* camera;
 
-TP01::TP01()
+AnimationPersonnage::AnimationPersonnage()
 {
 	setWindowTitle(trUtf8("IN55-TP01"));
 
@@ -46,7 +41,7 @@ TP01::TP01()
 }
 
 
-TP01::~TP01()
+AnimationPersonnage::~AnimationPersonnage()
 {
     delete basis;
     delete cube;
@@ -56,7 +51,7 @@ TP01::~TP01()
 
 
 bool
-TP01::initializeObjects()
+AnimationPersonnage::initializeObjects()
 {
 	// Fond gris
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
@@ -82,7 +77,7 @@ TP01::initializeObjects()
 
 
 void
-TP01::render()
+AnimationPersonnage::render()
 {
 	// Initialisation de la caméra
     lookAt(camera->getMPosition().x,
@@ -166,7 +161,7 @@ TP01::render()
 
 
 void
-TP01::keyPressEvent( QKeyEvent* event )
+AnimationPersonnage::keyPressEvent( QKeyEvent* event )
 {
     switch( event->key())
     {
@@ -221,7 +216,7 @@ TP01::keyPressEvent( QKeyEvent* event )
 }
 
 void
-TP01::mouseMoveEvent( QMouseEvent* event )
+AnimationPersonnage::mouseMoveEvent( QMouseEvent* event )
 {
     translateMouse.x = mouse.x - event->x();
     translateMouse.y = mouse.y -  event->y();

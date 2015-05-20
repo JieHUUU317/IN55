@@ -3,8 +3,8 @@
 
 #include "AbstractFramework.h"
 #include "GlCamera.h"
-#include "include/GLM/fwd.hpp"
-#include "include/GLM/glm.hpp"
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
 #include <QLinkedList>
 #include <QImage>
 #include <vector>

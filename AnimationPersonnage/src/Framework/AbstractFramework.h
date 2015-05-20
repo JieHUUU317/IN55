@@ -4,7 +4,10 @@
 
 
 #include"include/GL/glew.h"
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
 
+using namespace glm;
 class AbstractFramework
 {
     public:
@@ -71,20 +74,20 @@ class AbstractFramework
 		*\brief Multiplie la matrice de transformation courante par une matrice de
 		*translation utilisant le vecteur de coordonnées \a x, \a y et \a z.
 		*/
-        virtual void translate(GLfloat x, GLfloat y, GLfloat z) = 0;
+        virtual void translate(float32 x, float32 y, float32 z) = 0;
 
 		/*!
 		*\brief Multiplie la matrice de transformation courante par une matrice de
 		*rotation utilisant l'angle \a angle (en degrés) et l'axe représenté par le
 		*vecteur de coordonnées \a x, \a y et \a z.
 		*/
-		virtual void rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z) = 0;
+        virtual void rotate(float32 angle, float32 x, float32 y, float32 z) = 0;
 
 		/*!
 		*\brief Multiplie la matrice de transformation courante par une matrice de
 		*changement d'échelle utilisant les facteurs \a x, \a y et \a z.
 		*/
-		virtual void scale(GLfloat x, GLfloat y, GLfloat z) = 0;
+        virtual void scale(float32 x, float32 y, float32 z) = 0;
 
 		virtual void computeAncillaryMatrices() = 0;
 

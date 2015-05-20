@@ -29,7 +29,6 @@ src/main.cpp \
     src/Shapes/Pyramid.cpp \
     src/Shapes/Shape.cpp \
     src/Shapes/Star.cpp \
-    src/Tools/GLMatrix.cpp \
     src/Tools/RandomNumberGenerator.cpp \
     src/AnimationPersonnage.cpp \
     src/Framework/GlWindow.cpp
@@ -50,8 +49,6 @@ HEADERS += \
     src/Shapes/Pyramid.h \
     src/Shapes/Shape.h \
     src/Shapes/Star.h \
-    src/Tools/GLMatrix.h \
-    src/Tools/GlQuaternion.h \
     src/Tools/MemDefns.h \
     src/Tools/RandomNumberGenerator.h \
     src/AnimationPersonnage.h \

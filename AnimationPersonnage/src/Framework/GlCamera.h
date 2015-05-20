@@ -2,12 +2,11 @@
 #define GLCAMERA
 
 #include <QLinkedList>
-#include"include/GL/glew.h"
+#include"GL/glew.h"
 #include <QImage>
 #include "GLM/fwd.hpp"
 #include "GLM/glm.hpp"
-#include "include/GLM/gtc/quaternion.hpp"
-#include <string>
+#include "GLM/gtc/quaternion.hpp"
 
 using namespace glm;
 
@@ -31,55 +30,19 @@ public:
 
     void translateR(float32 shift, float32 sX, float32 sY, float32 sZ);
 
-    void rotateR(double angle, float32 sX, float32 sY, float32 sZ);
+    void rotateR(float32 angle, float32 upX, float32 upY, float32 upZ);
 
-    void rotateU(double angle, float32 upX, float32 upY, float32 upZ);
+    void rotateU(float32 angle, float32 upX, float32 upY, float32 upZ);
 
-    /**
-     * @brief get the view matrix
-     * @return
-     */
-    vec3<float32>& getViewMatrix();
-
-    /**
-     * @brief get the projection matrix
-     * @return
-     */
-
-  vec3<float32>& getProjectionMatrix();
-
-    /**
-     * @brief set the ration of the view of camera
-     * @param ar
-     */
     void setAspectRatio(float32 aspectRatio);
 
-    /**
-     * @brief setPlanes
-     * @param np
-     * @param fp
-     */
     void setPlanes(float32 nearp, float32 farp);
 
-    /**
-    * @brief set the field of view
-    * @param angle
-    */
-    void setFOV(float angle);
+    void setFOV(float32 angle);
 
     vec3<float32> getMPosition();
 
     vec3<float32> getMOrientation();
-
-    /**
-    * @brief builders for the matrix
-    */
-    void buildViewMatrix();
-
-    void buildPerspectiveProjectionMatrix();
-
-    void buildOrthoProjectionMatrix();
-
 };
 
 #endif

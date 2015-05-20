@@ -1,14 +1,14 @@
-﻿#ifndef TP01_h
-#define TP01_h
+﻿#ifndef ANIMATIONPERSONNAGE_H
+#define ANIMATIONPERSONNAGE_H
 
-#include "GlWindow.h"
+#include "Framework/GlWindow.h"
 
 
-class TP01 : public GlWindow
+class AnimationPersonnage : public GlWindow
 {
 	public:
-		TP01();
-        ~TP01();
+        AnimationPersonnage();
+        ~AnimationPersonnage();
 
 		/*!
 		*\brief Initialization des objets.

@@ -1,21 +1,8 @@
-﻿//*****************************************************************************
-//
-// Class: GlFramework
-// Authors: Fabrice LAURI (fabrice.lauri@utbm.fr)
-//          (Associate Professor at the
-//          "Université de Technologie de Belfort-Montbéliard", France)
-//          Jocelyn BUISSON (jocelyn.buisson@voxelia.com)
-// Version: 1.0
-// Last update: 2012-05-01
-//
-//*****************************************************************************
-
-#define _USE_MATH_DEFINES
+﻿#define _USE_MATH_DEFINES
 #include <cmath>
 #include "GlFramework.h"
-#include "Object3D.h"
+#include "src/Shapes/Object3D.h"
 #include "GlCamera.h"
-#include "GLMatrix.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QGLWidget>
@@ -279,7 +266,6 @@ GlFramework::setPerspective(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat 
     GLfloat iWidth  = 1.0f / (right - left);
     GLfloat iHeight = 1.0f / (top - bottom);
     GLfloat iDepth  = 1.0f / (zFar - zNear);
-
     pProjMatrix.m[0][0] = 2.0f * zNear * iWidth;     pProjMatrix.m[0][1] = 0.0f;         pProjMatrix.m[0][2] =  (right + left) * iWidth;        pProjMatrix.m[0][3] =  0.0f;
     pProjMatrix.m[1][0] = 0.0f;     pProjMatrix.m[1][1] = 2.0f * zNear * iHeight;       pProjMatrix.m[1][2] =  (top + bottom) * iHeight;        pProjMatrix.m[1][3] =  0.0f;
     pProjMatrix.m[2][0] = 0.0f;     pProjMatrix.m[2][1] = 0.0f;     pProjMatrix.m[2][2] = -(zFar + zNear) * iDepth;      pProjMatrix.m[2][3] = -2.0f * (zFar * zNear) * iDepth;
