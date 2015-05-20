@@ -2,7 +2,7 @@
 #define Shape_Cylinder_h
 
 
-#include "Shapes/ParametricShape.h"
+#include "Shape.h"
 
 
 class Cylinder : public ParametricShape

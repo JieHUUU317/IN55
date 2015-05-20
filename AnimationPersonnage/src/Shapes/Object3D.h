@@ -1,10 +1,12 @@
 ﻿#ifndef Object3D_h
 #define Object3D_h
 
+#include<src/Framework/AbstractFramework.h>
+#include"GL/glew.h"
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
 
-#include "AbstractFramework.h"
-
-
+using namespace glm;
 class Object3D
 {
 	public:

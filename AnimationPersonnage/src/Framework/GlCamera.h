@@ -1,22 +1,24 @@
 #ifndef GLCAMERA
 #define GLCAMERA
 
-#define _USE_MATH_DEFINES
-#include <cmath>
 #include <QLinkedList>
+#include"include/GL/glew.h"
 #include <QImage>
-#include "include/GLM/fwd.hpp"
-#include "include/GLM/glm.hpp"
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
+#include "include/GLM/gtc/quaternion.hpp"
 #include <string>
+
 using namespace glm;
+
 class GlCamera {
 
 protected:
 
     vec3<float32>  m_postion;
-    GlQuaternion m_Orientation;
-    GLMatrix m_ViewMatrix, m_ProjectionMatrix;
-    GLfloat ratio, FOVAngle, nearp, nearpf;
+    quat m_Orientation;
+    mat4 m_ViewMatrix, m_ProjectionMatrix;
+    float32 ratio, FOVAngle, nearp, nearpf;
 
 public:
 
@@ -24,8 +26,6 @@ public:
     ~GlCamera();
 
     GlCamera(float32 px, float32 py, float32 pz, float32 ex,float32 ey,float32 e);
-
-    //void translate(float32 x, float32 y, float32 z);
 
     void translateO(float32 shift, float32 sX, float32 sY, float32 upZ);
 
@@ -36,26 +36,17 @@ public:
     void rotateU(double angle, float32 upX, float32 upY, float32 upZ);
 
     /**
-     * @brief rotate the camera in angle around the direction (ax,ay,az)
-     * @param angle
-     * @param ax
-     * @param ay
-     * @param az
-     */
-    void rotate(float32 angle, float32 ax, float32 ay, float32 az);
-
-    /**
      * @brief get the view matrix
      * @return
      */
-    GLMatrix& getViewMatrix();
+    vec3<float32>& getViewMatrix();
 
     /**
      * @brief get the projection matrix
      * @return
      */
 
-    GLMatrix& getProjectionMatrix();
+  vec3<float32>& getProjectionMatrix();
 
     /**
      * @brief set the ration of the view of camera
@@ -71,18 +62,18 @@ public:
     void setPlanes(float32 nearp, float32 farp);
 
     /**
-     * @brief set the field of view
-     * @param angle
-     */
-    void setFOV(float32 angle);
+    * @brief set the field of view
+    * @param angle
+    */
+    void setFOV(float angle);
 
-    AbstractVec3<float32> getMPosition();
+    vec3<float32> getMPosition();
 
-    AbstractVec3<float32> getMOrientation();
+    vec3<float32> getMOrientation();
 
     /**
-     * @brief builders for the matrixs
-     */
+    * @brief builders for the matrix
+    */
     void buildViewMatrix();
 
     void buildPerspectiveProjectionMatrix();

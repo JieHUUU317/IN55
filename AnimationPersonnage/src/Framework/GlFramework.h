@@ -14,7 +14,7 @@ using namespace glm;
 
 class GlFramework : public AbstractFramework
 {
-    public: // methods
+    public:
         GlFramework();
         ~GlFramework();
 
@@ -37,17 +37,6 @@ class GlFramework : public AbstractFramework
         void setPerspective(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar);
 
         void setOrtho(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar);
-        /*!
-        *\brief Recalcule la matrive de vue en utilisant les coordonnées \a eyeX,
-        *\a eyeY et \a eyeZ correspondant à la position de la caméra, les
-        *coordonnées \a targetX, \a targetY et \a targetZ du point visé par la
-        *caméra et les coordonnées \a upX, \a upY et \a upZ du vecteur représentant
-        *l'axe vertical de la caméra.
-        */
-        void setCameraPerspective(GlCamera* camera);
-        void setCameraOrtho(GlCamera* camera);
-
-       // void lookAt(GlCamera* camera);
 
         void lookAt(GLfloat eyeX, GLfloat eyeY, GLfloat eyeZ, GLfloat targetX, GLfloat targetY, GLfloat targetZ, GLfloat upX = 0.0f, GLfloat upY = 1.0f, GLfloat upZ = 0.0f);
 

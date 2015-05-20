@@ -97,7 +97,7 @@ class AbstractFramework
 	bool useShader( const char* shader_name ); \
 	GLint getCurrentShaderId() const; \
 	void transmitMVP( GLuint var_id ); \
-	void transmitMV( GLuint var_id ); \
+    void transmitMV( GLuint var_id );\
 	void transmitNM( GLuint var_id ); \
 	void transmitM( GLuint var_id ); \
 	void transmitV( GLuint var_id ); \

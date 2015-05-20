@@ -1,45 +1,42 @@
-#define _USE_MATH_DEFINES
-
-
-#include "Object3D.h"
+#include "src/Shapes/Object3D.h"
 #include "GlCamera.h"
-#include "GlQuaternion.h"
-#include <cmath>
-#include "GLMatrix.h"
-#include <limits>
-#include "LF_String.h"
+//#include <cmath>
+//#include <limits>
+//#include "LF_String.h"
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
 #include <iostream>
 
-using namespace  std;
+using namespace  glm;
 
 GlCamera::GlCamera(float32 px, float32 py, float32 pz, float32 ex,float32 ey,float32 ez){
     m_postion.x = px;
     m_postion.y = py;
     m_postion.z = pz;
-    m_Orientation.setX(ex - px);
-    m_Orientation.setY(ey - py);
-    m_Orientation.setZ(ez - pz);
-    m_Orientation.setScalar(0.0f);
-    m_Orientation.normalize();
+    m_Orientation.x=ex-px;
+    m_Orientation.y=ey-py;
+    m_Orientation.z=ez-pz;
+    m_Orientation.w=0.0f;
+    normalize(m_Orientation);
     ratio = FOVAngle = nearp = nearpf =0.0f;
  }
 
-AbstractVec3<float32> GlCamera::getMPosition(){
+mat3<float32> GlCamera::getMPosition(){
     return m_postion;
 }
 
-AbstractVec3<float32> GlCamera::getMOrientation(){
-    return m_Orientation.vector();
+quat GlCamera::getMOrientation(){
+    return m_Orientation;
 }
 
 void GlCamera::translateO(float32 shift, float32 upX, float32 upY, float32 upZ){
 
-    GLfloat forwardX = m_Orientation.x();
-    GLfloat forwardY = m_Orientation.y();
-    GLfloat forwardZ = m_Orientation.z();
+    GLfloat forwardX = m_Orientation.x;
+    GLfloat forwardY = m_Orientation.y;
+    GLfloat forwardZ = m_Orientation.z;
 
-    GLfloat forwardLen = std::sqrt(forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ);
-    if(forwardLen > std::numeric_limits<GLfloat>::epsilon())
+    GLfloat forwardLen = glm::sqrt(forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ);
+    if(forwardLen > (GLfloat)epsilon())
     {
     forwardX /= forwardLen;
     forwardY /= forwardLen;
@@ -57,9 +54,9 @@ void GlCamera::translateO(float32 shift, float32 upX, float32 upY, float32 upZ){
 
 void GlCamera::translateR(float32 shift, float32 upX, float32 upY, float32 upZ){
 
-    GLfloat forwardX = m_Orientation.x();
-    GLfloat forwardY = m_Orientation.y();
-    GLfloat forwardZ = m_Orientation.z();
+   /** GLfloat forwardX = m_Orientation.x;
+    GLfloat forwardY = m_Orientation.y;
+    GLfloat forwardZ = m_Orientation.z;
 
     GLfloat forwardLen = std::sqrt(forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ);
     if(forwardLen > std::numeric_limits<GLfloat>::epsilon())
@@ -68,33 +65,33 @@ void GlCamera::translateR(float32 shift, float32 upX, float32 upY, float32 upZ){
     forwardY /= forwardLen;
     forwardZ /= forwardLen;
     }
-
-    GLfloat upLen = std::sqrt(upX * upX + upY * upY + upZ * upZ);
-    if(upLen > std::numeric_limits<GLfloat>::epsilon())
-    {
-    upX /= upLen;
-    upY /= upLen;
-    upZ /= upLen;
-    }
-
     GLfloat sX = forwardY * upZ - forwardZ * upY;
     GLfloat sY = forwardZ * upX - forwardX * upZ;
     GLfloat sZ = forwardX * upY - forwardY * upX;
-
-    GLfloat shiftX = sX*shift;
+    GLfloat shiftX = rt*shift;
     GLfloat shiftY = sY*shift;
     GLfloat shiftZ = sZ*shift;
-
     m_postion.x = m_postion.x + shiftX;
     m_postion.y = m_postion.y + shiftY;
     m_postion.z = m_postion.z + shiftZ;
+    */
+
+    vec3 up = vec3(upX,upY,upZ);
+    normalize(up);
+    vec3 fw = vec3(m_Orientation.x,m_Orientation.y,m_Orientation.z);
+    normalize(fw);
+    vec3 rt = cross(up,fw);
+    normalize(rt);
+    vec3  sft = rt*shift;
+    m_postion += sft;
 
 }
 
-void GlCamera::rotateR(double angle, float32 sX, float32 sY, float32 sZ){
-    GLfloat forwardX = m_Orientation.x();
-    GLfloat forwardY = m_Orientation.y();
-    GLfloat forwardZ = m_Orientation.z();
+void GlCamera::rotateR(double angle, float32 upX, float32 upY, float32 upZ){
+    /**
+    GLfloat forwardX = m_Orientation.x;
+    GLfloat forwardY = m_Orientation.y;
+    GLfloat forwardZ = m_Orientation.z;
 
     GLfloat forwardLen = std::sqrt(forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ);
     if(forwardLen > std::numeric_limits<GLfloat>::epsilon())
@@ -111,16 +108,25 @@ void GlCamera::rotateR(double angle, float32 sX, float32 sY, float32 sZ){
     sY /= upLen;
     sZ /= upLen;
     }
-
-    GLfloat upX = sY * forwardZ - sZ * forwardY;
-    GLfloat upY = sZ * forwardX - sX * forwardZ;
-    GLfloat upZ = sX * forwardY - sY * forwardX;
-
     GLfloat c = std::cos(angle/2.0f);
     GLfloat s = std::sin(angle/2.0f);
-    GlQuaternion* rotation = new GlQuaternion(c,upX*s,upY*s,upZ*s);
-    rotation->normalize();
-    m_Orientation = (*rotation)*(m_Orientation)*rotation->conjugate();
+    GLfloat upX = (sY * forwardZ - sZ * forwardY)*s;
+    GLfloat upY = (sZ * forwardX - sX * forwardZ)*s;
+    GLfloat upZ = (sX * forwardY - sY * forwardX)*s;
+
+    quat rotation = quat(c,upX*s,upY*s,upZ*s);
+    normalize(rotation);
+    rotate(m_Orientation,);
+    m_Orientation = rotation*(m_Orientation)*conjugate(rotation);
+    */
+    vec3 up = vec3(upX,upY,upZ);
+    normalize(up);
+    vec3 fw = vec3(m_Orientation.x,m_Orientation.y,m_Orientation.z);
+    normalize(fw);
+    vec3 rt = cross(up,fw);
+    normalize(rt);
+    m_Orientation = rotate(m_Orientation,angle,rt);
+
 }
 
 
@@ -161,52 +167,11 @@ void GlCamera::rotateU(double angle, float32 upX, float32 upY, float32 upZ){
     m_Orientation = (*rotation)*(m_Orientation)*rotation->conjugate();
 }
 
-
-void GlCamera::rotate(float32 angle, float32 x, float32 y, float32 z){
-    /**
-
-    m_forward.x = newOrientation.x();
-    m_forward.y = newOrientation.y();
-    m_forward.z = newOrientation.z();
-
-    m_up.x = 0.0f;
-    m_up.y = 1.0f;
-    m_up.z = 0.0f;
-
-    m_right = m_forward.crossProduct(m_up);
-    m_right.normalize();
-    m_up = m_right.crossProduct(m_forward);
-    m_up.normalize();
-    std::cout << "m_forward : " << m_forward.x << "," << m_forward.y << "," << m_forward.z << std::endl;
-    std::cout << "m_up : " << m_up.x << "," << m_up.y << "," << m_up.z << std::endl;
-    std::cout << "m_right : " << m_right.x << "," << m_right.y << "," << m_right.z << std::endl;
-     std::cout << "m_postion : " << m_postion.x << "," << m_postion.y << "," << m_postion.z << std::endl;
-
-    GLfloat Tx = -(m_right.x)*m_postion.x - (m_right.y)*m_postion.y - (m_right.z)*m_postion.z;
-    GLfloat Ty = -(m_up.x)*m_postion.x - (m_up.y)*m_postion.y - (m_up.z)*m_postion.z;
-    GLfloat Tz = - (m_forward.x)*m_postion.x - (m_forward.y)*m_postion.y - (m_forward.z)*m_postion.z;
-
-    m_ViewMatrix.m[0][0] = m_right.x;        m_ViewMatrix.m[0][1] = m_right.y;        m_ViewMatrix.m[0][2] = m_right.z;        m_ViewMatrix.m[0][3] = Tx;
-    m_ViewMatrix.m[1][0] = m_up.x;        m_ViewMatrix.m[1][1] = m_up.y;        m_ViewMatrix.m[1][2] = m_up.z;        m_ViewMatrix.m[1][3] = Ty;
-    m_ViewMatrix.m[2][0] = m_forward.x; m_ViewMatrix.m[2][1] = m_forward.y; m_ViewMatrix.m[2][2] = m_forward.z; m_ViewMatrix.m[2][3] = Tz;
-    m_ViewMatrix.m[3][0] = 0.0f;      m_ViewMatrix.m[3][1] = 0.0f;      m_ViewMatrix.m[3][2] = 0.0f;      m_ViewMatrix.m[3][3] = 1.0f;
-
-    GLfloat nw = newOrientation.scalar();
-    GLfloat nx = newOrientation.x();
-    GLfloat ny = newOrientation.y();
-    GLfloat nz = newOrientation.z();
-    //std::cout << "newOrientation : " << newOrientation.x() << "," << newOrientation.y() << "," << newOrientation.z() << std::endl;
-
-    m_ViewMatrix.m[0][0] = 1 - 2*ny*ny -2*nz*nz;        m_ViewMatrix.m[0][1] = 2*nx*ny - 2*nw*nz;        m_ViewMatrix.m[0][2] = 2*nx*nz + 2*nw*ny;
-    m_ViewMatrix.m[1][0] = 2*nx*ny + 2*nw*nz;        m_ViewMatrix.m[1][1] = 1 - 2*nx*nx - 2*nz*nz;        m_ViewMatrix.m[1][2] = 2*ny*nz - 2*nw*nx;
-    m_ViewMatrix.m[2][0] = 2*nx*nz - 2*nw*ny;        m_ViewMatrix.m[2][1] = 2*ny*nz + 2*nw*nx; m_ViewMatrix.m[2][2] = 1 - 2*nx*nx - 2*ny*ny;
-*/}
-
-GLMatrix& GlCamera::getViewMatrix(){
+vec3<float32>& GlCamera::getViewMatrix(){
     return m_ViewMatrix;
 }
 
-GLMatrix &GlCamera::getProjectionMatrix(){
+vec3<float32>& GlCamera::getProjectionMatrix(){
     return m_ProjectionMatrix;
 }
 
@@ -219,61 +184,11 @@ void GlCamera::setPlanes(float32 np, float32 fp){
     nearpf = fp;
 }
 
-void GlCamera::setFOV(float32 angle){
+void GlCamera::setFOV(float angle){
     FOVAngle = angle;
 }
 
 void GlCamera:: buildViewMatrix(){
-    /**
-    m_Orientation.normalize();
-    AbstractVec3 m_forward = new AbstractVec3();
-    AbstractVec3 m_up = new AbstractVec3();
-    AbstractVec3 m_right = new AbstractVec3();
-
-    m_forward.x = m_Orientation.x();
-    m_forward.y = m_Orientation.y();
-    m_forward.z = m_Orientation.z();
-
-    m_up.x = 0.0f;
-    m_up.y = 1.0f;
-    m_up.z = 0.0f;
-
-    m_right = m_forward.crossProduct(m_up);
-    m_right.normalize();
-    m_up = m_right.crossProduct(m_forward);
-    m_up.normalize();
-    GLfloat Tx =  (- 1 + 2*y*y + 2*z*z)*m_postion.x - (2*x*y - 2*w*z)*m_postion.y - (2*x*z + 2*w*y)*m_postion.z;
-    GLfloat Ty = - (2*x*y + 2*w*z)*m_postion.x - (1 - 2*x*x - 2*z*z)*m_postion.y - (2*y*z - 2*w*x)*m_postion.z;
-    GLfloat Tz = - (2*x*z - 2*w*y)*m_postion.x - (2*y*z + 2*w*x)*m_postion.y - (1 - 2*x*x - 2*y*y)*m_postion.z;
-
-    GLfloat Tx = -(m_right.x)*m_postion.x - (m_right.y)*m_postion.y - (m_right.z)*m_postion.z;
-    GLfloat Ty = -(m_up.x)*m_postion.x - (m_up.y)*m_postion.y - (m_up.z)*m_postion.z;
-    GLfloat Tz = - (m_forward.x)*m_postion.x - (m_forward.y)*m_postion.y - (m_forward.z)*m_postion.z;
-
-    m_ViewMatrix.m[0][0] = 0.0f;        m_ViewMatrix.m[0][1] = 0.0f;        m_ViewMatrix.m[0][2] = 0.0f;        m_ViewMatrix.m[0][3] = 0.0f;
-    m_ViewMatrix.m[1][0] = 0.0f;        m_ViewMatrix.m[1][1] = 0.0f;        m_ViewMatrix.m[1][2] = 0.0f;        m_ViewMatrix.m[1][3] = 0.0f;
-    m_ViewMatrix.m[2][0] = 0.0f;        m_ViewMatrix.m[2][1] = 0.0f;        m_ViewMatrix.m[2][2] = 0.0f;        m_ViewMatrix.m[2][3] = 0.0f;
-    m_ViewMatrix.m[3][0] = 0.0f;       m_ViewMatrix.m[3][1] = 0.0f;         m_ViewMatrix.m[3][2] = 0.0f;        m_ViewMatrix.m[3][3] = 1.0f;
-
-    GLMatrix t;
-    t.m[0][0] = 1.0f; t.m[0][1] = 0.0f; t.m[0][2] = 0.0f; t.m[0][3] = -m_postion.x;
-    t.m[1][0] = 0.0f; t.m[1][1] = 1.0f; t.m[1][2] = 0.0f; t.m[1][3] = -m_postion.y;
-    t.m[2][0] = 0.0f; t.m[2][1] = 0.0f; t.m[2][2] = 1.0f; t.m[2][3] = -m_postion.z;
-    t.m[3][0] = 0.0f; t.m[3][1] = 0.0f; t.m[3][2] = 0.0f; t.m[3][3] = 1.0f;
-
-    m_ViewMatrix = m_ViewMatrix * t;
-    GLfloat w = m_Orientation.scalar();
-    GLfloat x = m_Orientation.x();
-    GLfloat y = m_Orientation.y();
-    GLfloat z = m_Orientation.z();
-
-
-
-    m_ViewMatrix.m[0][0] = 1 - 2*y*y -2*z*z;        m_ViewMatrix.m[0][1] = 2*x*y - 2*w*z;        m_ViewMatrix.m[0][2] = 2*x*z + 2*w*y;      m_ViewMatrix.m[0][3] = Tx;
-    m_ViewMatrix.m[1][0] = 2*x*y + 2*w*z;          m_ViewMatrix.m[1][1] = 1 - 2*x*x - 2*z*z;    m_ViewMatrix.m[1][2] = 2*y*z - 2*w*x;       m_ViewMatrix.m[1][3] = Ty;
-    m_ViewMatrix.m[2][0] = 2*x*z - 2*w*y;           m_ViewMatrix.m[2][1] = 2*y*z + 2*w*x;       m_ViewMatrix.m[2][2] = 1 - 2*x*x - 2*y*y;   m_ViewMatrix.m[2][3] = Tz;
-    m_ViewMatrix.m[3][0] = 0.0f;                          m_ViewMatrix.m[3][1] = 0.0f;                        m_ViewMatrix.m[3][2] = 0.0f;                       m_ViewMatrix.m[3][3] = 1.0f;
-        */
 }
 
 void GlCamera::buildPerspectiveProjectionMatrix(){

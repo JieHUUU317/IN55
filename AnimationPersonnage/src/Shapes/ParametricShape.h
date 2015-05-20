@@ -2,7 +2,7 @@
 #define Shape_ParametricShape_h
 
 
-#include "Shapes/Shape.h"
+#include "Shape.h"
 
 #include <vector>
 

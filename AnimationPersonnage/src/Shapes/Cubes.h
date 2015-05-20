@@ -1,9 +1,8 @@
 ﻿#ifndef Shapes_h
 #define Shapes_h
 
-
-#include "Shapes/ParametricShape.h"
-
+#include"GL/glew.h"
+#include "Shape.h"
 
 class MulticolorCube : public Shape
 {

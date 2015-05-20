@@ -6,8 +6,7 @@
 #define QT_NO_OPENGL_ES_2
 
 #include "Types.h"
-#include "../Object3D.h"
-
+#include "Shape.h"
 
 class Shape : public Object3D
 {

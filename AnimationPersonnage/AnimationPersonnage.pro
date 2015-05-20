@@ -31,7 +31,8 @@ src/main.cpp \
     src/Shapes/Star.cpp \
     src/Tools/GLMatrix.cpp \
     src/Tools/RandomNumberGenerator.cpp \
-    src/AnimationPersonnage.cpp
+    src/AnimationPersonnage.cpp \
+    src/Framework/GlWindow.cpp
 
 
 HEADERS += \
@@ -53,7 +54,8 @@ HEADERS += \
     src/Tools/GlQuaternion.h \
     src/Tools/MemDefns.h \
     src/Tools/RandomNumberGenerator.h \
-    src/AnimationPersonnage.h
+    src/AnimationPersonnage.h \
+    src/Framework/GlWindow.h
 
 
 

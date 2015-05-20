@@ -1,6 +1,7 @@
 #ifndef BASISPLAN
 #define BASISPLAN
-#include "Shapes/ParametricShape.h"
+
+#include "ParametricShape.h"
 #include "Object3D.h"
 
 class BasisPlan : public Object3D

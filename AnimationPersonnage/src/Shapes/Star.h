@@ -2,8 +2,7 @@
 #define Shape_Star_h
 
 
-#include "Shapes/ParametricShape.h"
-
+#include "src/Shapes/Shape.h"
 
 class Star : public ParametricShape
 {
