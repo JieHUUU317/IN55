@@ -1,22 +1,21 @@
 ﻿#define _USE_MATH_DEFINES
 #include <cmath>
 #include "GlFramework.h"
+#include <glm/gtc/type_ptr.hpp>
+#include<glm/gtc/matrix_transform.hpp>
+#include<glm/gtc/matrix_inverse.hpp>
 #include "src/Shapes/Object3D.h"
 #include "GlCamera.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QGLWidget>
-#include <limits>
 #include "LF_String.h"
-
+#include <limits>
 #include <iostream>
-
-using namespace std;
-
 
 GlFramework::GlFramework()
 {
-    pViewMatrix.setIdentity();
+    pViewMatrix = glm::mat4(1.0);
     loadIdentity();
 
     m_CurrentShader = -1;
@@ -34,7 +33,7 @@ GlFramework::~GlFramework()
 bool
 GlFramework::init()
 {
-    cout << "Init GLEW" << endl;
+    std::cout << "Init GLEW" << std::endl;
 
     glewExperimental = GL_TRUE;
 
@@ -42,10 +41,9 @@ GlFramework::init()
     if(error != GLEW_OK)
     {
         return false;
-//        QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec de l'initialization de GLEW: %1").arg(reinterpret_cast<const char *>(glewGetErrorString(error))));
-//        exit(-1);
+//         QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec de l'initialization de GLEW: %1").arg(reinterpret_cast<const char *>(glewGetErrorString(error))));
+        exit(-1);
     }
-
     Object3D::setFramework( this );
 }
 
@@ -105,7 +103,7 @@ GlFramework::createShader( const char* shader_prefix )
         log.resize(logSize - 1);
         glGetShaderInfoLog(vshader, logSize, &logSize, log.data());
 
-		cout << "Error: " << QString(log).toStdString().c_str() << endl;
+        std::cout << "Error: " << QString(log).toStdString().c_str() << std::endl;
 
         return -1;
 //        QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec de la compilation du vertex shader:\n\n%1").arg(QString(log)));
@@ -122,7 +120,7 @@ GlFramework::createShader( const char* shader_prefix )
         log.resize(logSize - 1);
         glGetShaderInfoLog(fshader, logSize, &logSize, log.data());
 
-		cout << "Error: " << QString(log).toStdString().c_str() << endl;
+        std::cout << "Error: " << QString(log).toStdString().c_str() << std::endl;
 
 		return -1;
 //        QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec de la compilation du fragment shader:\n\n%1").arg(QString(log)));
@@ -138,7 +136,7 @@ GlFramework::createShader( const char* shader_prefix )
         log.resize(logSize - 1);
         glGetProgramInfoLog(pProgram, logSize, &logSize, log.data());
 
-		cout << "Error: " << QString(log).toStdString().c_str() << endl;
+        std::cout << "Error: " << QString(log).toStdString().c_str() << std::endl;
 
 		return -1;
 
@@ -212,140 +210,54 @@ GlFramework::getCurrentShaderId() const
 void
 GlFramework::transmitMVP( GLuint var_id )
 {
-	glUniformMatrix4fv( var_id, 1, GL_TRUE, pMVPMatrix.data );
+    glUniformMatrix4fv( var_id, 1, GL_FALSE, glm::value_ptr(pMVPMatrix));
 }
 
 void
 GlFramework::transmitMV( GLuint var_id )
 {
-	glUniformMatrix4fv( var_id, 1, GL_TRUE, pModelViewMatrix.data );
+    glUniformMatrix4fv( var_id, 1, GL_FALSE, glm::value_ptr(pModelViewMatrix));
 }
 
 void
 GlFramework::transmitNM( GLuint var_id )
 {
-	glUniformMatrix3fv( var_id, 1, GL_FALSE, pNormalMatrix.data );
+    glUniformMatrix3fv( var_id, 1, GL_FALSE,glm::value_ptr(pNormalMatrix));
 }
 
 void
 GlFramework::transmitM( GLuint var_id )
 {
-    glUniformMatrix4fv( var_id, 1, GL_TRUE, pModelMatrix.data );
+    glUniformMatrix4fv( var_id, 1, GL_FALSE, glm::value_ptr(pModelMatrix));
 }
 
 void
 GlFramework::transmitV( GLuint var_id )
 {
-	glUniformMatrix4fv( var_id, 1, GL_TRUE, pViewMatrix.data );
+    glUniformMatrix4fv( var_id, 1, GL_FALSE,glm::value_ptr(pViewMatrix));
 }
 
 void
 GlFramework::transmitP( GLuint var_id )
 {
-   glUniformMatrix4fv( var_id, 1, GL_TRUE, pProjMatrix.data );
-}
-
-void
-GlFramework::setCameraPerspective(GlCamera* camera)
-{
-    pProjMatrix = camera->getProjectionMatrix();
+   glUniformMatrix4fv( var_id, 1, GL_FALSE, glm::value_ptr(pProjMatrix));
 }
 
 void
 GlFramework::setPerspective(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar)
 {
-    GLfloat thetaY = 0.5f * (M_PI * fovY / 180.0f);
-    GLfloat tanThetaY = tan(thetaY);
-    GLfloat tanThetaX = tanThetaY * ratio;
-    GLfloat halfW   =  tanThetaX * zNear;
-    GLfloat halfH   =  tanThetaY * zNear;
-    GLfloat left    = -halfW;
-    GLfloat right   =  halfW;
-    GLfloat bottom  = -halfH;
-    GLfloat top     =  halfH;
-    GLfloat iWidth  = 1.0f / (right - left);
-    GLfloat iHeight = 1.0f / (top - bottom);
-    GLfloat iDepth  = 1.0f / (zFar - zNear);
-    pProjMatrix.m[0][0] = 2.0f * zNear * iWidth;     pProjMatrix.m[0][1] = 0.0f;         pProjMatrix.m[0][2] =  (right + left) * iWidth;        pProjMatrix.m[0][3] =  0.0f;
-    pProjMatrix.m[1][0] = 0.0f;     pProjMatrix.m[1][1] = 2.0f * zNear * iHeight;       pProjMatrix.m[1][2] =  (top + bottom) * iHeight;        pProjMatrix.m[1][3] =  0.0f;
-    pProjMatrix.m[2][0] = 0.0f;     pProjMatrix.m[2][1] = 0.0f;     pProjMatrix.m[2][2] = -(zFar + zNear) * iDepth;      pProjMatrix.m[2][3] = -2.0f * (zFar * zNear) * iDepth;
-    pProjMatrix.m[3][0] = 0.0f;     pProjMatrix.m[3][1] = 0.0f;     pProjMatrix.m[3][2] = -1.0f;     pProjMatrix.m[3][3] =  0.0f;
-
+    pProjMatrix = glm::perspective(fovY,ratio,zNear,zFar);
 }
-
-
-void
-GlFramework::setCameraOrtho(GlCamera* camera){
-
-    pProjMatrix = camera->getProjectionMatrix();
-}
-
 
 void
 GlFramework::setOrtho(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar)
 {
-    GLfloat thetaY = 0.5f * (M_PI * fovY / 180.0f);
-    GLfloat tanThetaY = tan(thetaY);
-    GLfloat tanThetaX = tanThetaY * ratio;
-    GLfloat halfW   =  tanThetaX * zNear;
-    GLfloat halfH   =  tanThetaY * zNear;
-    GLfloat left    = -halfW;
-    GLfloat right   =  halfW;
-    GLfloat bottom  = -halfH;
-    GLfloat top     =  halfH;
-    GLfloat iWidth  = 1.0f / (right - left);
-    GLfloat iHeight = 1.0f / (top - bottom);
-    GLfloat iDepth  = 1.0f / (zNear - zFar);
-
-    pProjMatrix.m[0][0] = 2.0f * iWidth;    pProjMatrix.m[0][1] = 0.0f;             pProjMatrix.m[0][2] = 0.0f;             pProjMatrix.m[0][3] = -(right+left) * iWidth;
-    pProjMatrix.m[1][0] = 0.0f;             pProjMatrix.m[1][1] = 2.0f * iHeight;   pProjMatrix.m[1][2] = 0.0f;             pProjMatrix.m[1][3] =  -(top+bottom) * iHeight;
-    pProjMatrix.m[2][0] = 0.0f;             pProjMatrix.m[2][1] = 0.0f;             pProjMatrix.m[2][2] = 2.0f * iDepth;    pProjMatrix.m[2][3] = (zFar+zNear) * iDepth;
-    pProjMatrix.m[3][0] = 0.0f;             pProjMatrix.m[3][1] = 0.0f;             pProjMatrix.m[3][2] = 0.0f;             pProjMatrix.m[3][3] =  1.0f;
 }
 
 void
-GlFramework::lookAt(GLfloat eyeX, GLfloat eyeY, GLfloat eyeZ, GLfloat targetX, GLfloat targetY, GLfloat targetZ, GLfloat upX, GLfloat upY, GLfloat upZ)
+GlFramework::setLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up)
 {
-    GLfloat forwardX = targetX - eyeX;
-    GLfloat forwardY = targetY - eyeY;
-    GLfloat forwardZ = targetZ - eyeZ;
-
-    GLfloat forwardLen = std::sqrt(forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ);
-    if(forwardLen > std::numeric_limits<GLfloat>::epsilon())
-    {
-    forwardX /= forwardLen;
-    forwardY /= forwardLen;
-    forwardZ /= forwardLen;
-    }
-
-    GLfloat upLen = std::sqrt(upX * upX + upY * upY + upZ * upZ);
-    if(upLen > std::numeric_limits<GLfloat>::epsilon())
-    {
-    upX /= upLen;
-    upY /= upLen;
-    upZ /= upLen;
-    }
-
-    GLfloat sX = forwardY * upZ - forwardZ * upY;
-    GLfloat sY = forwardZ * upX - forwardX * upZ;
-    GLfloat sZ = forwardX * upY - forwardY * upX;
-
-    GLfloat uX = sY * forwardZ - sZ * forwardY;
-    GLfloat uY = sZ * forwardX - sX * forwardZ;
-    GLfloat uZ = sX * forwardY - sY * forwardX;
-
-    pViewMatrix.m[0][0] = sX;        pViewMatrix.m[0][1] = sY;        pViewMatrix.m[0][2] = sZ;        pViewMatrix.m[0][3] = 0.0f;
-    pViewMatrix.m[1][0] = uX;        pViewMatrix.m[1][1] = uY;        pViewMatrix.m[1][2] = uZ;        pViewMatrix.m[1][3] = 0.0f;
-    pViewMatrix.m[2][0] = -forwardX; pViewMatrix.m[2][1] = -forwardY; pViewMatrix.m[2][2] = -forwardZ; pViewMatrix.m[2][3] = 0.0f;
-    pViewMatrix.m[3][0] = 0.0f;      pViewMatrix.m[3][1] = 0.0f;      pViewMatrix.m[3][2] = 0.0f;      pViewMatrix.m[3][3] = 1.0f;
-
-    GLMatrix t;
-    t.m[0][0] = 1.0f; t.m[0][1] = 0.0f; t.m[0][2] = 0.0f; t.m[0][3] = -eyeX;
-    t.m[1][0] = 0.0f; t.m[1][1] = 1.0f; t.m[1][2] = 0.0f; t.m[1][3] = -eyeY;
-    t.m[2][0] = 0.0f; t.m[2][1] = 0.0f; t.m[2][2] = 1.0f; t.m[2][3] = -eyeZ;
-    t.m[3][0] = 0.0f; t.m[3][1] = 0.0f; t.m[3][2] = 0.0f; t.m[3][3] = 1.0f;
-
-    pViewMatrix = pViewMatrix * t;
+    pViewMatrix = glm::lookAt(eye,center,up);
 }
 
 void
@@ -363,52 +275,25 @@ GlFramework::popMatrix()
 void
 GlFramework::loadIdentity()
 {
-    pModelMatrix.setIdentity();
+    pModelMatrix = glm::mat4(1.0);
 }
 
 void
-GlFramework::translate(GLfloat x, GLfloat y, GLfloat z)
+GlFramework::translateFramework(GLfloat x, GLfloat y, GLfloat z)
 {
-    GLMatrix t;
-    t.m[0][0] = 1.0f; t.m[0][1] = 0.0f; t.m[0][2] = 0.0f; t.m[0][3] = x;
-    t.m[1][0] = 0.0f; t.m[1][1] = 1.0f; t.m[1][2] = 0.0f; t.m[1][3] = y;
-    t.m[2][0] = 0.0f; t.m[2][1] = 0.0f; t.m[2][2] = 1.0f; t.m[2][3] = z;
-    t.m[3][0] = 0.0f; t.m[3][1] = 0.0f; t.m[3][2] = 0.0f; t.m[3][3] = 1.0f;
-    pModelMatrix = pModelMatrix * t;
+    pModelMatrix = glm::translate(pModelMatrix, glm::vec3(x, y, z));
 }
 
 void
-GlFramework::rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
+GlFramework::rotateFramework(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
-    GLfloat rAngle = M_PI * angle / 180.0f;
-    GLfloat c = std::cos(rAngle);
-    GLfloat s = std::sin(rAngle);
-
-    GLfloat axisLen = std::sqrt(x * x + y * y + z * z);
-    if(axisLen > std::numeric_limits<GLfloat>::epsilon())
-    {
-		x /= axisLen;
-		y /= axisLen;
-		z /= axisLen;
-    }
-
-    GLMatrix r;
-    r.m[0][0] = x * x * (1.0f - c) + c;     r.m[0][1] = x * y * (1.0f - c) - z * s; r.m[0][2] = x * z * (1.0f - c) + y * s; r.m[0][3] = 0.0f;
-    r.m[1][0] = y * x * (1.0f - c) + z * s; r.m[1][1] = y * y * (1.0f - c) + c;     r.m[1][2] = y * z * (1.0f - c) - x * s; r.m[1][3] = 0.0f;
-    r.m[2][0] = z * x * (1.0f - c) - y * s; r.m[2][1] = y * z * (1.0f - c) + x * s; r.m[2][2] = z * z * (1.0f - c) + c;     r.m[2][3] = 0.0f;
-    r.m[3][0] = 0.0f;                       r.m[3][1] = 0.0f;                       r.m[3][2] = 0.0f;                       r.m[3][3] = 1.0f;
-    pModelMatrix = pModelMatrix * r;
+    pModelMatrix = glm::rotate(pModelMatrix, angle, glm::vec3(x,y,z));
 }
 
 void
-GlFramework::scale(GLfloat x, GLfloat y, GLfloat z)
+GlFramework::scaleFramework(GLfloat x, GLfloat y, GLfloat z)
 {
-    GLMatrix s;
-    s.m[0][0] = x;    s.m[0][1] = 0.0f; s.m[0][2] = 0.0f; s.m[0][3] = 0.0f;
-    s.m[1][0] = 0.0f; s.m[1][1] = y;    s.m[1][2] = 0.0f; s.m[1][3] = 0.0f;
-    s.m[2][0] = 0.0f; s.m[2][1] = 0.0f; s.m[2][2] = z;    s.m[2][3] = 0.0f;
-    s.m[3][0] = 0.0f; s.m[3][1] = 0.0f; s.m[3][2] = 0.0f; s.m[3][3] = 1.0f;
-    pModelMatrix = pModelMatrix * s;
+    pModelMatrix = glm::scale(pModelMatrix, glm::vec3(x,y,z));
 }
 
 
@@ -416,7 +301,7 @@ void
 GlFramework::computeAncillaryMatrices()
 {
 	pModelViewMatrix = pViewMatrix * pModelMatrix;
-	pNormalMatrix = inverse( pModelViewMatrix );
+    pNormalMatrix = glm::affineInverse( pModelViewMatrix );
 	pMVPMatrix = pProjMatrix * pModelViewMatrix;
 }
 
@@ -443,7 +328,7 @@ GlFramework::createTexture( const char* filename )
         lf::String name;
 
         glGenTextures( 1, &texId );
-        cout << "Texture #" << texId << ": " << filename << " loaded!" << endl;
+        std::cout << "Texture #" << texId << ": " << filename << " loaded!" <<std::endl;
 
 //		glEnable( GL_TEXTURE_CUBE_MAP );
         glBindTexture( GL_TEXTURE_CUBE_MAP, texId );
@@ -453,14 +338,14 @@ GlFramework::createTexture( const char* filename )
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP);
 
-        for( uint32 i = 0; i < 6; ++i )
+        for( int i = 0; i < 6; ++i )
         {
             name = filename;
             name += cubemaps[i];
 
             if (image.load( name.c_str() ))
             {
-                cout << name.c_str() << " (" << image.width() << "," << image.height() << ") loaded!" << endl;
+                std::cout << name.c_str() << " (" << image.width() << "," << image.height() << ") loaded!" << std::endl;
 
                 image = QGLWidget::convertToGLFormat( image );
                 glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.bits() );
@@ -474,7 +359,7 @@ GlFramework::createTexture( const char* filename )
             image = QGLWidget::convertToGLFormat( image );
 
             glGenTextures( 1, &texId );
-            cout << "Texture #" << texId << ": " << filename << " (" << image.width() << "," << image.height() << ") loaded!" << endl;
+            std::cout << "Texture #" << texId << ": " << filename << " (" << image.width() << "," << image.height() << ") loaded!" << std::endl;
 
 //			glEnable( GL_TEXTURE_2D );
             glBindTexture( GL_TEXTURE_2D, texId );
@@ -490,7 +375,7 @@ GlFramework::createTexture( const char* filename )
             image = QGLWidget::convertToGLFormat( image );
 
             glGenTextures( 1, &texId );
-            cout << "Texture #" << texId << ": " << filename << " (" << image.width() << "," << image.height() << ") loaded!" << endl;
+            std::cout << "Texture #" << texId << ": " << filename << " (" << image.width() << "," << image.height() << ") loaded!" << std::endl;
 
 //			glDisable( GL_TEXTURE_CUBE_MAP );
 //			glEnable( GL_TEXTURE_1D );

@@ -10,7 +10,7 @@
 //*****************************************************************************
 
 
-#include "Shapes/Pyramid.h"
+#include "Pyramid.h"
 
 
 Pyramid::Pyramid( int basis_nbr_edges, GLfloat radius, GLfloat y_high ) : ParametricShape( basis_nbr_edges+2 )

@@ -3,11 +3,12 @@
 // Main Program Projet IN55
 //
 //*****************************************************************************
-#include <QCoreApplication>
-
+#include <QApplication>
+#include "AnimationPersonnage.h"
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-
+    QApplication a(argc, argv);
+    AnimationPersonnage win;
+    win.show();
     return a.exec();
 }

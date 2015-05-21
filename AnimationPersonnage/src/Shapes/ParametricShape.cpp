@@ -11,10 +11,9 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "Shapes/ParametricShape.h"
+#include "ParametricShape.h"
 
 #include "MemDefns.h"
-
 #include <stdio.h>
 #include <string.h>
 
@@ -22,10 +21,10 @@
 ParametricShape::ParametricShape( int nbr_vertices )
 {
     m_TabVertices = new GLfloat [nbr_vertices*3];
-    memset( m_TabVertices, 0.0f, nbr_vertices*3*sizeof( GLfloat ) );
+    memset( m_TabVertices, 0, nbr_vertices*3*sizeof( GLfloat ) );
 
     m_TabColors = new GLfloat [nbr_vertices*3];
-    memset( m_TabColors, 0.0f, nbr_vertices*3*sizeof( GLfloat ) );
+    memset( m_TabColors, 0, nbr_vertices*3*sizeof( GLfloat ) );
 }
 
 ParametricShape::~ParametricShape()
@@ -60,7 +59,7 @@ void ParametricShape::initVertex( int pos, GLfloat x, GLfloat y, GLfloat z )
 void ParametricShape::generatePointsOnCircle( int pos, int stride, int nbr_edges, GLfloat radius, GLfloat angle_shift, GLfloat y, bool include_center )
 {
     GLfloat angle;
-    GLfloat shift = (2.0f*M_PI)/nbr_edges;
+    GLfloat shift = (GLfloat)(2.0f*M_PI)/nbr_edges;
     GLfloat x, z;
     int i;
 

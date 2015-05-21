@@ -1,9 +1,9 @@
 ﻿#ifndef Shape_ParametricShape_h
 #define Shape_ParametricShape_h
 
-
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "Shape.h"
-
 #include <vector>
 
 

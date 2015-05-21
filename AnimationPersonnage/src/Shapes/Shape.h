@@ -1,13 +1,13 @@
 ﻿#ifndef Shape_h
 #define Shape_h
-
-
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <GL/glew.h>
 #define QT_NO_OPENGL_ES_2
 
-#include "Types.h"
-#include "Shape.h"
 
+#include "Object3D.h"
+#include "Types.h"
 class Shape : public Object3D
 {
     public:
@@ -16,7 +16,7 @@ class Shape : public Object3D
 
 		void clear();
 
-		uint32 getNbrVertices() const;
+        uint32 getNbrVertices() const;
 		const GLfloat* vertices() const;
 		const GLfloat* normals() const;
 		const GLfloat* textureCoordinates() const;

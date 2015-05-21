@@ -16,8 +16,8 @@ CFLAGS        = -nologo -Zm200 -Zc:wchar_t -O2 -MD -W3 $(DEFINES)
 CXXFLAGS      = -nologo -Zm200 -Zc:wchar_t -O2 -MD -GR -W3 -w34100 -w34189 -EHsc $(DEFINES)
 INCPATH       = -I"." -I"include" -I"C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include" -I"C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL" -I"C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets" -I"C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui" -I"C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore" -I"release" -I"C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\win32-msvc2010" 
 LINKER        = link
-LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = glu32.lib opengl32.lib gdi32.lib user32.lib /LIBPATH:C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\qtmain.lib shell32.lib /LIBPATH:F:\GitHub\IN55\AnimationPersonnage\lib\ F:\GitHub\IN55\AnimationPersonnage\lib\\glew32.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5OpenGL.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5Widgets.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5Gui.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5Core.lib 
+LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:CONSOLE "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
+LIBS          = glu32.lib opengl32.lib gdi32.lib user32.lib /LIBPATH:F:\GitHub\IN55\AnimationPersonnage\lib\ F:\GitHub\IN55\AnimationPersonnage\lib\\glew32.lib /LIBPATH:C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5OpenGL.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5Widgets.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5Gui.lib C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\lib\Qt5Core.lib 
 QMAKE         = C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\bin\qmake.exe
 IDC           = idc
 IDL           = midl
@@ -46,8 +46,6 @@ OBJECTS_DIR   = obj
 SOURCES       = src\main.cpp \
 		src\Framework\GlCamera.cpp \
 		src\Framework\GlFramework.cpp \
-		src\Model\MD5Animation.cpp \
-		src\Model\MD5Model.cpp \
 		src\Shapes\Basis.cpp \
 		src\Shapes\BasisPlan.cpp \
 		src\Shapes\Cubes.cpp \
@@ -57,15 +55,13 @@ SOURCES       = src\main.cpp \
 		src\Shapes\Pyramid.cpp \
 		src\Shapes\Shape.cpp \
 		src\Shapes\Star.cpp \
-		src\Tools\GLMatrix.cpp \
 		src\Tools\RandomNumberGenerator.cpp \
 		src\AnimationPersonnage.cpp \
-		src\Framework\GlWindow.cpp 
+		src\Framework\GlWindow.cpp \
+		src\Tools\LF_String.cpp 
 OBJECTS       = obj\main.obj \
 		obj\GlCamera.obj \
 		obj\GlFramework.obj \
-		obj\MD5Animation.obj \
-		obj\MD5Model.obj \
 		obj\Basis.obj \
 		obj\BasisPlan.obj \
 		obj\Cubes.obj \
@@ -75,16 +71,14 @@ OBJECTS       = obj\main.obj \
 		obj\Pyramid.obj \
 		obj\Shape.obj \
 		obj\Star.obj \
-		obj\GLMatrix.obj \
 		obj\RandomNumberGenerator.obj \
 		obj\AnimationPersonnage.obj \
-		obj\GlWindow.obj
+		obj\GlWindow.obj \
+		obj\LF_String.obj
 
 DIST          =  src\Framework\AbstractFramework.h \
 		src\Framework\GlCamera.h \
 		src\Framework\GlFramework.h \
-		src\Model\MD5Animation.h \
-		src\Model\MD5Model.h \
 		src\Shapes\Basis.h \
 		src\Shapes\BasisPlan.h \
 		src\Shapes\Cubes.h \
@@ -94,16 +88,14 @@ DIST          =  src\Framework\AbstractFramework.h \
 		src\Shapes\Pyramid.h \
 		src\Shapes\Shape.h \
 		src\Shapes\Star.h \
-		src\Tools\GLMatrix.h \
-		src\Tools\GlQuaternion.h \
 		src\Tools\MemDefns.h \
 		src\Tools\RandomNumberGenerator.h \
 		src\AnimationPersonnage.h \
-		src\Framework\GlWindow.h src\main.cpp \
+		src\Framework\GlWindow.h \
+		src\Tools\Types.h \
+		src\Tools\LF_String.h src\main.cpp \
 		src\Framework\GlCamera.cpp \
 		src\Framework\GlFramework.cpp \
-		src\Model\MD5Animation.cpp \
-		src\Model\MD5Model.cpp \
 		src\Shapes\Basis.cpp \
 		src\Shapes\BasisPlan.cpp \
 		src\Shapes\Cubes.cpp \
@@ -113,10 +105,10 @@ DIST          =  src\Framework\AbstractFramework.h \
 		src\Shapes\Pyramid.cpp \
 		src\Shapes\Shape.cpp \
 		src\Shapes\Star.cpp \
-		src\Tools\GLMatrix.cpp \
 		src\Tools\RandomNumberGenerator.cpp \
 		src\AnimationPersonnage.cpp \
-		src\Framework\GlWindow.cpp
+		src\Framework\GlWindow.cpp \
+		src\Tools\LF_String.cpp
 QMAKE_TARGET  = AnimationPersonnage
 DESTDIR        = release\ #avoid trailing-slash linebreak
 TARGET         = AnimationPersonnage.exe
@@ -125,26 +117,6 @@ DESTDIR_TARGET = release\AnimationPersonnage.exe
 ####### Implicit rules
 
 .SUFFIXES: .c .cpp .cc .cxx
-
-{src\Model}.cpp{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{src\Model}.cc{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{src\Model}.cxx{obj\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
-
-{src\Model}.c{obj\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
-	$<
-<<
 
 {src}.cpp{obj\}.obj::
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
@@ -263,10 +235,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) AnimationPersonnage.zip $(SOURCES) $(DIST) AnimationPersonnage.pro C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\spec_pre.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\common\shell-win32.conf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\qconfig.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axbase.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axserver.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_core.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_core_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_dbus.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_declarative.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_designer.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_enginio.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_gui.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_help.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_help_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_location.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_location_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_network.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_network_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_nfc.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_opengl.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_positioning.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qml.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quick.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_script.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_script_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sensors.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_serialport.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sql.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_svg.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_testlib.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_uitools.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkit.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_websockets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webview.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_widgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_winextras.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xml.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\qt_functions.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\qt_config.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\qt_config.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\win32-msvc2010\qmake.conf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\spec_post.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exclusive_builds.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\default_pre.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\default_pre.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resolve_config.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exclusive_builds_post.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\default_post.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\build_pass.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\rtti.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\precompile_header.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\warn_on.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\qt.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resources.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\moc.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\opengl.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\uic.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\windows.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\testcase_targets.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exceptions.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\yacc.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\lex.prf AnimationPersonnage.pro C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/qtmain.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Core.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5OpenGL.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Widgets.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Gui.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
+	$(ZIP) AnimationPersonnage.zip $(SOURCES) $(DIST) AnimationPersonnage.pro C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\spec_pre.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\common\shell-win32.conf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\qconfig.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axbase.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axserver.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_core.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_core_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_dbus.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_declarative.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_designer.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_enginio.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_gui.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_help.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_help_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_location.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_location_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_network.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_network_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_nfc.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_opengl.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_positioning.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qml.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quick.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_script.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_script_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sensors.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_serialport.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sql.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_svg.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_testlib.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_uitools.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkit.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_websockets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webview.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_widgets.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_winextras.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xml.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\qt_functions.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\qt_config.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\qt_config.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\win32-msvc2010\qmake.conf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\spec_post.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exclusive_builds.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\default_pre.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\default_pre.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resolve_config.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exclusive_builds_post.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\default_post.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\build_pass.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\console.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\rtti.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\precompile_header.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\warn_on.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\qt.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resources.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\moc.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\opengl.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\uic.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\testcase_targets.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exceptions.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\yacc.prf C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\lex.prf AnimationPersonnage.pro C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5OpenGL.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Widgets.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Gui.prl C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Core.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) obj\main.obj obj\GlCamera.obj obj\GlFramework.obj obj\MD5Animation.obj obj\MD5Model.obj obj\Basis.obj obj\BasisPlan.obj obj\Cubes.obj obj\Cylinder.obj obj\Object3D.obj obj\ParametricShape.obj obj\Pyramid.obj obj\Shape.obj obj\Star.obj obj\GLMatrix.obj obj\RandomNumberGenerator.obj obj\AnimationPersonnage.obj obj\GlWindow.obj
+	-$(DEL_FILE) obj\main.obj obj\GlCamera.obj obj\GlFramework.obj obj\Basis.obj obj\BasisPlan.obj obj\Cubes.obj obj\Cylinder.obj obj\Object3D.obj obj\ParametricShape.obj obj\Pyramid.obj obj\Shape.obj obj\Star.obj obj\RandomNumberGenerator.obj obj\AnimationPersonnage.obj obj\GlWindow.obj obj\LF_String.obj
 	-$(DEL_FILE) release\AnimationPersonnage.exp release\AnimationPersonnage.exe.embed.manifest
 
 distclean: clean 
@@ -301,7 +273,8 @@ compiler_clean:
 
 ####### Compile
 
-obj\main.obj: src\main.cpp C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QCoreApplication \
+obj\main.obj: src\main.cpp C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\QApplication \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qapplication.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcoreapplication.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qglobal.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qconfig.h \
@@ -352,13 +325,73 @@ obj\main.obj: src\main.cpp C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QCor
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcontainerfwd.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qisenum.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobject_impl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qeventloop.h
-
-obj\GlCamera.obj: src\Framework\GlCamera.cpp src\Shapes\Object3D.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qwindowdefs.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qwindowdefs_win.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qpoint.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsize.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qcursor.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qwidget.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmargins.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpaintdevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qrect.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpalette.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qcolor.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qrgb.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringlist.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qdatastream.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qiodevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qpair.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qregexp.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringmatcher.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qbrush.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvector.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qmatrix.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpolygon.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qregion.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qline.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtransform.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpainterpath.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qimage.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpixelformat.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpixmap.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsharedpointer.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qshareddata.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qhash.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsharedpointer_impl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfont.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfontmetrics.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfontinfo.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qsizepolicy.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qkeysequence.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qevent.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvariant.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmap.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qdebug.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qtextstream.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlocale.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qset.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcontiguouscache.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qurl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qurlquery.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfile.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfiledevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qvector2d.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtouchdevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qinputmethod.h \
+		src\AnimationPersonnage.h \
+		src\Framework\GlWindow.h \
+		src\Framework\GlFramework.h \
 		src\Framework\AbstractFramework.h \
 		include\GL\glew.h \
 		include\GL\glu.h \
 		include\GL\gl.h \
+		src\Framework\GlCamera.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QLinkedList \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QImage \
 		include\GLM\fwd.hpp \
 		include\GLM\detail\type_int.hpp \
 		include\GLM\detail\setup.hpp \
@@ -438,6 +471,33 @@ obj\GlCamera.obj: src\Framework\GlCamera.cpp src\Shapes\Object3D.h \
 		include\GLM\integer.hpp \
 		include\GLM\detail\func_integer.hpp \
 		include\GLM\detail\func_integer.inl \
+		include\GLM\gtc\quaternion.hpp \
+		include\GLM\gtc\constants.hpp \
+		include\GLM\gtc\constants.inl \
+		include\GLM\gtc\quaternion.inl \
+		include\LF_String.h \
+		include\Types.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\QGLWidget \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qgl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpen.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qglcolormap.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qtopenglglobal.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QKeyEvent
+
+obj\GlCamera.obj: src\Framework\GlCamera.cpp src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
 		src\Framework\GlCamera.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QLinkedList \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlinkedlist.h \
@@ -514,6 +574,85 @@ obj\GlCamera.obj: src\Framework\GlCamera.cpp src\Shapes\Object3D.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringlist.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qregexp.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringmatcher.h \
+		include\GLM\fwd.hpp \
+		include\GLM\detail\type_int.hpp \
+		include\GLM\detail\setup.hpp \
+		include\GLM\detail\type_float.hpp \
+		include\GLM\detail\type_vec.hpp \
+		include\GLM\detail\precision.hpp \
+		include\GLM\detail\type_mat.hpp \
+		include\GLM\glm.hpp \
+		include\GLM\detail\_fixes.hpp \
+		include\GLM\vec2.hpp \
+		include\GLM\detail\type_vec2.hpp \
+		include\GLM\detail\_swizzle.hpp \
+		include\GLM\detail\_swizzle_func.hpp \
+		include\GLM\detail\type_vec2.inl \
+		include\GLM\vec3.hpp \
+		include\GLM\detail\type_vec3.hpp \
+		include\GLM\detail\type_vec3.inl \
+		include\GLM\vec4.hpp \
+		include\GLM\detail\type_vec4.hpp \
+		include\GLM\detail\type_vec4.inl \
+		include\GLM\detail\type_vec4_sse2.inl \
+		include\GLM\detail\type_vec4_avx.inl \
+		include\GLM\detail\type_vec4_avx2.inl \
+		include\GLM\mat2x2.hpp \
+		include\GLM\detail\type_mat2x2.hpp \
+		include\GLM\detail\type_mat2x2.inl \
+		include\GLM\mat2x3.hpp \
+		include\GLM\detail\type_mat2x3.hpp \
+		include\GLM\detail\type_mat2x3.inl \
+		include\GLM\mat2x4.hpp \
+		include\GLM\detail\type_mat2x4.hpp \
+		include\GLM\detail\type_mat2x4.inl \
+		include\GLM\mat3x2.hpp \
+		include\GLM\detail\type_mat3x2.hpp \
+		include\GLM\detail\type_mat3x2.inl \
+		include\GLM\mat3x3.hpp \
+		include\GLM\detail\type_mat3x3.hpp \
+		include\GLM\detail\type_mat3x3.inl \
+		include\GLM\mat3x4.hpp \
+		include\GLM\detail\type_mat3x4.hpp \
+		include\GLM\detail\type_mat3x4.inl \
+		include\GLM\mat4x2.hpp \
+		include\GLM\detail\type_mat4x2.hpp \
+		include\GLM\detail\type_mat4x2.inl \
+		include\GLM\mat4x3.hpp \
+		include\GLM\detail\type_mat4x3.hpp \
+		include\GLM\detail\type_mat4x3.inl \
+		include\GLM\mat4x4.hpp \
+		include\GLM\detail\type_mat4x4.hpp \
+		include\GLM\detail\type_mat4x4.inl \
+		include\GLM\trigonometric.hpp \
+		include\GLM\detail\func_trigonometric.hpp \
+		include\GLM\detail\func_trigonometric.inl \
+		include\GLM\detail\_vectorize.hpp \
+		include\GLM\detail\type_vec1.hpp \
+		include\GLM\detail\type_vec1.inl \
+		include\GLM\exponential.hpp \
+		include\GLM\detail\func_exponential.hpp \
+		include\GLM\detail\func_exponential.inl \
+		include\GLM\detail\func_vector_relational.hpp \
+		include\GLM\detail\func_vector_relational.inl \
+		include\GLM\common.hpp \
+		include\GLM\detail\func_common.hpp \
+		include\GLM\detail\func_common.inl \
+		include\GLM\packing.hpp \
+		include\GLM\detail\func_packing.hpp \
+		include\GLM\detail\func_packing.inl \
+		include\GLM\detail\type_half.hpp \
+		include\GLM\detail\type_half.inl \
+		include\GLM\geometric.hpp \
+		include\GLM\detail\func_geometric.hpp \
+		include\GLM\detail\func_geometric.inl \
+		include\GLM\matrix.hpp \
+		include\GLM\detail\func_matrix.hpp \
+		include\GLM\detail\func_matrix.inl \
+		include\GLM\vector_relational.hpp \
+		include\GLM\integer.hpp \
+		include\GLM\detail\func_integer.hpp \
+		include\GLM\detail\func_integer.inl \
 		include\GLM\gtc\quaternion.hpp \
 		include\GLM\gtc\constants.hpp \
 		include\GLM\gtc\constants.inl \
@@ -683,6 +822,32 @@ obj\GlFramework.obj: src\Framework\GlFramework.cpp src\Framework\GlFramework.h \
 		include\GLM\gtc\constants.hpp \
 		include\GLM\gtc\constants.inl \
 		include\GLM\gtc\quaternion.inl \
+		include\LF_String.h \
+		include\Types.h \
+		include\glm\gtc\type_ptr.hpp \
+		include\glm\gtc\quaternion.hpp \
+		include\glm\mat3x3.hpp \
+		include\glm\mat4x4.hpp \
+		include\glm\vec3.hpp \
+		include\glm\vec4.hpp \
+		include\glm\vec2.hpp \
+		include\glm\mat2x2.hpp \
+		include\glm\mat2x3.hpp \
+		include\glm\mat2x4.hpp \
+		include\glm\mat3x2.hpp \
+		include\glm\mat3x4.hpp \
+		include\glm\mat4x2.hpp \
+		include\glm\mat4x3.hpp \
+		include\glm\gtc\type_ptr.inl \
+		include\glm\gtc\matrix_transform.hpp \
+		include\glm\gtc\matrix_transform.inl \
+		include\glm\geometric.hpp \
+		include\glm\trigonometric.hpp \
+		include\glm\matrix.hpp \
+		include\glm\gtc\matrix_inverse.hpp \
+		include\glm\detail\setup.hpp \
+		include\glm\gtc\matrix_inverse.inl \
+		src\Shapes\Object3D.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\QMessageBox \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qmessagebox.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qdialog.h \
@@ -729,36 +894,98 @@ obj\GlFramework.obj: src\Framework\GlFramework.cpp src\Framework\GlFramework.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qglcolormap.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qtopenglglobal.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QSurfaceFormat \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h \
-		include\LF_String.h \
-		include\Types.h
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h
 
-obj\MD5Animation.obj: src\Model\MD5Animation.cpp src\Model\MD5Animation.h
+obj\Basis.obj: src\Shapes\Basis.cpp src\Shapes\Basis.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h
 
-obj\MD5Model.obj: src\Model\MD5Model.cpp src\Model\MD5Model.h
+obj\BasisPlan.obj: src\Shapes\BasisPlan.cpp src\Shapes\BasisPlan.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h
 
-obj\Basis.obj: src\Shapes\Basis.cpp 
+obj\Cubes.obj: src\Shapes\Cubes.cpp src\Shapes\Cubes.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Shapes\Shape.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\Types.h \
+		src\Shapes\ParametricShape.h
 
-obj\BasisPlan.obj: src\Shapes\BasisPlan.cpp 
-
-obj\Cubes.obj: src\Shapes\Cubes.cpp 
-
-obj\Cylinder.obj: src\Shapes\Cylinder.cpp 
+obj\Cylinder.obj: src\Shapes\Cylinder.cpp src\Shapes\Cylinder.h \
+		src\Shapes\Shape.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\Types.h \
+		src\Shapes\ParametricShape.h
 
 obj\Object3D.obj: src\Shapes\Object3D.cpp 
 
-obj\ParametricShape.obj: src\Shapes\ParametricShape.cpp include\MemDefns.h
+obj\ParametricShape.obj: src\Shapes\ParametricShape.cpp src\Shapes\ParametricShape.h \
+		src\Shapes\Shape.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\Types.h \
+		include\MemDefns.h
 
-obj\Pyramid.obj: src\Shapes\Pyramid.cpp 
+obj\Pyramid.obj: src\Shapes\Pyramid.cpp src\Shapes\Pyramid.h \
+		src\Shapes\Shape.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\Types.h \
+		src\Shapes\ParametricShape.h
 
-obj\Shape.obj: src\Shapes\Shape.cpp include\MemDefns.h
+obj\Shape.obj: src\Shapes\Shape.cpp src\Shapes\Shape.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\Types.h \
+		include\MemDefns.h
 
-obj\Star.obj: src\Shapes\Star.cpp 
+obj\Star.obj: src\Shapes\Star.cpp src\Shapes\Star.h \
+		src\Shapes\Shape.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Shapes\Object3D.h \
+		src\Framework\AbstractFramework.h \
+		include\Types.h \
+		src\Shapes\ParametricShape.h
 
-obj\GLMatrix.obj: src\Tools\GLMatrix.cpp src\Tools\GLMatrix.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\QGLWidget \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qgl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengl.h \
+obj\RandomNumberGenerator.obj: src\Tools\RandomNumberGenerator.cpp src\Tools\RandomNumberGenerator.h \
+		include\Types.h \
+		include\MemDefns.h
+
+obj\AnimationPersonnage.obj: src\AnimationPersonnage.cpp src\AnimationPersonnage.h \
+		src\Framework\GlWindow.h \
+		src\Framework\GlFramework.h \
+		src\Framework\AbstractFramework.h \
+		include\GL\glew.h \
+		include\GL\glu.h \
+		include\GL\gl.h \
+		src\Framework\GlCamera.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QLinkedList \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qiterator.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qglobal.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qconfig.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfeatures.h \
@@ -787,107 +1014,50 @@ obj\GLMatrix.obj: src\Tools\GLMatrix.cpp src\Tools\GLMatrix.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qglobalstatic.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmutex.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qnumeric.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qt_windows.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengles2ext.h \
-		include\GL\gl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopenglext.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qwidget.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qwindowdefs.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QImage \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qimage.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtransform.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qmatrix.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpolygon.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvector.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbytearray.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qnamespace.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qwindowdefs_win.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobject.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstring.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qchar.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbytearray.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qrefcount.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qarraydata.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringbuilder.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlist.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qalgorithms.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qiterator.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qbytearraylist.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qpoint.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qrect.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmargins.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsize.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qregion.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qwindowdefs.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qwindowdefs_win.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qdatastream.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qiodevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcoreevent.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmetatype.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvarlengtharray.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcontainerfwd.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qisenum.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qobject_impl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmargins.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpaintdevice.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qrect.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsize.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qpoint.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpalette.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qcolor.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qrgb.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringlist.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qdatastream.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qiodevice.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qpair.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qline.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpainterpath.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpaintdevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qrgb.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpixelformat.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringlist.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qregexp.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qstringmatcher.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qbrush.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvector.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qmatrix.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpolygon.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qregion.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qline.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtransform.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpainterpath.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qimage.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpixelformat.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpixmap.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsharedpointer.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qshareddata.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qhash.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsharedpointer_impl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfont.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfontmetrics.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfontinfo.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qsizepolicy.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qcursor.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qkeysequence.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qevent.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvariant.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmap.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qdebug.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qtextstream.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlocale.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qset.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcontiguouscache.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qurl.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qurlquery.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfile.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfiledevice.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qvector2d.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtouchdevice.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpaintengine.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpainter.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpen.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qglcolormap.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qtopenglglobal.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QSurfaceFormat \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h \
-		include\LF_String.h \
-		include\Types.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\QMessageBox \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qmessagebox.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qdialog.h
-
-obj\RandomNumberGenerator.obj: src\Tools\RandomNumberGenerator.cpp src\Tools\RandomNumberGenerator.h \
-		include\Types.h \
-		include\MemDefns.h
-
-obj\AnimationPersonnage.obj: src\AnimationPersonnage.cpp src\Shapes\Basis.h \
-		src\Shapes\Object3D.h \
-		src\Framework\AbstractFramework.h \
-		include\GL\glew.h \
-		include\GL\glu.h \
-		include\GL\gl.h \
 		include\GLM\fwd.hpp \
 		include\GLM\detail\type_int.hpp \
 		include\GLM\detail\setup.hpp \
@@ -967,14 +1137,62 @@ obj\AnimationPersonnage.obj: src\AnimationPersonnage.cpp src\Shapes\Basis.h \
 		include\GLM\integer.hpp \
 		include\GLM\detail\func_integer.hpp \
 		include\GLM\detail\func_integer.inl \
+		include\GLM\gtc\quaternion.hpp \
+		include\GLM\gtc\constants.hpp \
+		include\GLM\gtc\constants.inl \
+		include\GLM\gtc\quaternion.inl \
+		include\LF_String.h \
+		include\Types.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\QGLWidget \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qgl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qwidget.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpalette.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qcolor.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qbrush.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpixmap.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsharedpointer.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qshareddata.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qhash.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qsharedpointer_impl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfont.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfontmetrics.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qfontinfo.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qsizepolicy.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qcursor.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qkeysequence.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qevent.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qvariant.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmap.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qdebug.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qtextstream.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qlocale.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qset.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcontiguouscache.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qurl.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qurlquery.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfile.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qfiledevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qvector2d.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtouchdevice.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qpen.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qglcolormap.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qtopenglglobal.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QKeyEvent \
+		src\Shapes\Basis.h \
+		src\Shapes\Object3D.h \
 		src\Shapes\Cubes.h \
 		src\Shapes\Shape.h \
-		include\Types.h \
-		src\Shapes\Pyramid.h \
-		src\Shapes\Cylinder.h \
-		src\Shapes\Star.h \
-		src\Shapes\BasisPlan.h \
-		src\Shapes\ParametricShape.h
+		src\Shapes\ParametricShape.h \
+		src\Shapes\BasisPlan.h
 
 obj\GlWindow.obj: src\Framework\GlWindow.cpp src\Framework\GlWindow.h \
 		src\Framework\GlFramework.h \
@@ -1141,6 +1359,8 @@ obj\GlWindow.obj: src\Framework\GlWindow.cpp src\Framework\GlWindow.h \
 		include\GLM\gtc\constants.hpp \
 		include\GLM\gtc\constants.inl \
 		include\GLM\gtc\quaternion.inl \
+		include\LF_String.h \
+		include\Types.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\QGLWidget \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qgl.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qopengl.h \
@@ -1185,6 +1405,10 @@ obj\GlWindow.obj: src\Framework\GlWindow.cpp src\Framework\GlWindow.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QSurfaceFormat \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QKeyEvent
+
+obj\LF_String.obj: src\Tools\LF_String.cpp include\LF_String.h \
+		include\Types.h \
+		include\MemDefns.h
 
 ####### Install
 

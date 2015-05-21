@@ -10,8 +10,7 @@
 //*****************************************************************************
 
 
-#include "Shapes/Cubes.h"
-
+#include "Cubes.h"
 #include <stdio.h>
 #include <string.h>
 

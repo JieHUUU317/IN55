@@ -10,7 +10,7 @@
 //*****************************************************************************
 
 
-#include "Shapes/Shape.h"
+#include "Shape.h"
 #include "MemDefns.h"
 
 

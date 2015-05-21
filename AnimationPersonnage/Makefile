@@ -178,6 +178,7 @@ Makefile: AnimationPersonnage.pro C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\win3
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resolve_config.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exclusive_builds_post.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\default_post.prf \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\console.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\rtti.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\precompile_header.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\warn_on.prf \
@@ -186,17 +187,15 @@ Makefile: AnimationPersonnage.pro C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\win3
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\moc.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\opengl.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\uic.prf \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\windows.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\testcase_targets.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exceptions.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\yacc.prf \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\lex.prf \
 		AnimationPersonnage.pro \
-		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/qtmain.prl \
-		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Core.prl \
 		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5OpenGL.prl \
 		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Widgets.prl \
-		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Gui.prl
+		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Gui.prl \
+		C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Core.prl
 	$(QMAKE) -spec win32-msvc2010 -o Makefile AnimationPersonnage.pro
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\spec_pre.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\common\shell-win32.conf:
@@ -303,6 +302,7 @@ C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\default_pre.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resolve_config.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exclusive_builds_post.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\default_post.prf:
+C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\console.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\rtti.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\precompile_header.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\warn_on.prf:
@@ -311,17 +311,15 @@ C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\resources.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\moc.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\opengl.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\uic.prf:
-C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\win32\windows.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\testcase_targets.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\exceptions.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\yacc.prf:
 C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\mkspecs\features\lex.prf:
 AnimationPersonnage.pro:
-C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/qtmain.prl:
-C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Core.prl:
 C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5OpenGL.prl:
 C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Widgets.prl:
 C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Gui.prl:
+C:/Qt/Qt5.4.1/5.4/msvc2010_opengl/lib/Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec win32-msvc2010 -o Makefile AnimationPersonnage.pro
 

@@ -8,7 +8,7 @@
 class Basis : public Object3D
 {
     public:
-        Basis( float length );
+        Basis( GLfloat length );
 
     protected:
         void drawShape( const char* shader_name );

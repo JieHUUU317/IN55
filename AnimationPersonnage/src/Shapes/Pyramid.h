@@ -3,6 +3,7 @@
 
 
 #include "Shape.h"
+#include "ParametricShape.h"
 
 
 class Pyramid : public ParametricShape

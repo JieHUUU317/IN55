@@ -4,10 +4,7 @@
 
 
 #include"include/GL/glew.h"
-#include "GLM/fwd.hpp"
-#include "GLM/glm.hpp"
 
-using namespace glm;
 class AbstractFramework
 {
     public:
@@ -74,20 +71,20 @@ class AbstractFramework
 		*\brief Multiplie la matrice de transformation courante par une matrice de
 		*translation utilisant le vecteur de coordonnées \a x, \a y et \a z.
 		*/
-        virtual void translate(float32 x, float32 y, float32 z) = 0;
+        virtual void translateFramework(GLfloat x, GLfloat y, GLfloat z) = 0;
 
 		/*!
 		*\brief Multiplie la matrice de transformation courante par une matrice de
 		*rotation utilisant l'angle \a angle (en degrés) et l'axe représenté par le
 		*vecteur de coordonnées \a x, \a y et \a z.
 		*/
-        virtual void rotate(float32 angle, float32 x, float32 y, float32 z) = 0;
+        virtual void rotateFramework(GLfloat angle, GLfloat x, GLfloat y, GLfloat z) = 0;
 
 		/*!
 		*\brief Multiplie la matrice de transformation courante par une matrice de
 		*changement d'échelle utilisant les facteurs \a x, \a y et \a z.
 		*/
-        virtual void scale(float32 x, float32 y, float32 z) = 0;
+        virtual void scaleFramework(GLfloat x, GLfloat y, GLfloat z) = 0;
 
 		virtual void computeAncillaryMatrices() = 0;
 
@@ -96,7 +93,7 @@ class AbstractFramework
 
 
 #define ABSTRACT_FRAMEWORK_INTERFACE \
-	bool useShader( GLint shader_id ); \
+    bool useShader( GLint shader_id ); \
 	bool useShader( const char* shader_name ); \
 	GLint getCurrentShaderId() const; \
 	void transmitMVP( GLuint var_id ); \
@@ -108,9 +105,9 @@ class AbstractFramework
 	void pushMatrix(); \
 	void popMatrix(); \
 	void loadIdentity(); \
-	void translate(GLfloat x, GLfloat y, GLfloat z); \
-	void rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z); \
-	void scale(GLfloat x, GLfloat y, GLfloat z); \
+    void translateFramework(GLfloat x, GLfloat y, GLfloat z); \
+    void rotateFramework(GLfloat angle, GLfloat x, GLfloat y, GLfloat z); \
+    void scaleFramework(GLfloat x, GLfloat y, GLfloat z); \
 	void computeAncillaryMatrices(); \
 	GLuint createTexture( const char* filename ); \
 

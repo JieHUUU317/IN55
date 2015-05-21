@@ -3,8 +3,9 @@
 
 #include"GL/glew.h"
 #include "Shape.h"
+#include "ParametricShape.h"
 
-class MulticolorCube : public Shape
+class MulticolorCube: public Shape
 {
     public:
         MulticolorCube();

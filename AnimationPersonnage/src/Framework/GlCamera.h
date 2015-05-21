@@ -8,41 +8,36 @@
 #include "GLM/glm.hpp"
 #include "GLM/gtc/quaternion.hpp"
 
-using namespace glm;
-
 class GlCamera {
 
 protected:
 
-    vec3<float32>  m_postion;
-    quat m_Orientation;
-    mat4 m_ViewMatrix, m_ProjectionMatrix;
-    float32 ratio, FOVAngle, nearp, nearpf;
+    glm::vec3  m_postion;
+    glm::quat m_Orientation;
+    glm::mat4 m_ViewMatrix, m_ProjectionMatrix;
+    GLfloat ratio, FOVAngle, nearp, nearpf;
 
 public:
 
-    GlCamera();
-    ~GlCamera();
+    GlCamera(GLfloat px, GLfloat py, GLfloat pz, GLfloat ex,GLfloat ey,GLfloat e);
 
-    GlCamera(float32 px, float32 py, float32 pz, float32 ex,float32 ey,float32 e);
+    void translateO(GLfloat shift, GLfloat sX, GLfloat sY, GLfloat upZ);
 
-    void translateO(float32 shift, float32 sX, float32 sY, float32 upZ);
+    void translateR(GLfloat shift, GLfloat sX, GLfloat sY, GLfloat sZ);
 
-    void translateR(float32 shift, float32 sX, float32 sY, float32 sZ);
+    void rotateR(GLfloat angle, GLfloat upX, GLfloat upY, GLfloat upZ);
 
-    void rotateR(float32 angle, float32 upX, float32 upY, float32 upZ);
+    void rotateU(GLfloat angle, GLfloat upX, GLfloat upY, GLfloat upZ);
 
-    void rotateU(float32 angle, float32 upX, float32 upY, float32 upZ);
+    void setAspectRatio(GLfloat aspectRatio);
 
-    void setAspectRatio(float32 aspectRatio);
+    void setPlanes(GLfloat nearp, GLfloat farp);
 
-    void setPlanes(float32 nearp, float32 farp);
+    void setFOV(GLfloat angle);
 
-    void setFOV(float32 angle);
+    glm::vec3 getMPosition();
 
-    vec3<float32> getMPosition();
-
-    vec3<float32> getMOrientation();
+    glm::quat getMOrientation();
 };
 
 #endif

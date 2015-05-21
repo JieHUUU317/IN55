@@ -14,8 +14,6 @@
 
 
 #include "RandomNumberGenerator.h"
-
-
 #include <math.h>
 #include <time.h>
 #include <iostream>
@@ -23,8 +21,6 @@
 #include <cstdlib>
 
 #include "MemDefns.h"
-
-using namespace std;
 
 
 //#pragma warning( disable : 4244 ) // disable conversions to lower precision

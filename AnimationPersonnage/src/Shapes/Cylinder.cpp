@@ -10,7 +10,7 @@
 //*****************************************************************************
 
 
-#include "Shapes/Cylinder.h"
+#include "Cylinder.h"
 
 
 Cylinder::Cylinder( int basis_nbr_edges, GLfloat radius, GLfloat y_low, GLfloat y_high ) : ParametricShape( (basis_nbr_edges+1)*2 )

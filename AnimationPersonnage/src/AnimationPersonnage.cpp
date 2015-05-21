@@ -1,23 +1,21 @@
-﻿#include "AnimationPersonnage.h"
+﻿#define _USE_MATH_DEFINES
+#include <cmath>
+#include "AnimationPersonnage.h"
 #include "Framework/GlCamera.h"
 #include "Shapes/Basis.h"
 #include "Shapes/Cubes.h"
 #include "Shapes/BasisPlan.h"
 #include <iostream>
 
-using namespace glm;
-
-vec3<float32> mouse;
-vec3<float32> translateMouse;
-float32 shiftR = 0.0f;
-float32 shiftN = 0.0f;
-float32 rotateAngle = 0.0f;
-float32 rotateLeg = 0.0f;
+GLfloat shiftR = 0.0f;
+GLfloat shiftN = 0.0f;
+GLfloat rotateAngle = 0.0f;
+GLfloat rotateLeg = 0.0f;
 boolean rotateOrder = true;
-float32 eyeAngleR = 0;
-float32 eyeAngleU = 0;
+GLfloat eyeAngleR = 0.0f;
+GLfloat eyeAngleU = 0.0f;
 
-const float32 g_AngleSpeed = 10.0f;
+const GLfloat g_AngleSpeed = 10.0f;
 
 
 Basis* basis;
@@ -27,15 +25,13 @@ GlCamera* camera;
 
 AnimationPersonnage::AnimationPersonnage()
 {
-	setWindowTitle(trUtf8("IN55-TP01"));
+    setWindowTitle(trUtf8("AnimationPersonnage"));
 
     basis = new Basis( 30.0 );
     basisPlan = new BasisPlan();
     cube = new TwoColorCube();
     camera = new GlCamera(100.0f,30.0f,100.0f,
                          0.0f,0.0f,0.0f);
-    mouse.x = QCursor::pos().x();
-    mouse.y = QCursor::pos().y();
     camera->setFOV(180.0f);
     camera->setPlanes(0.1f, 800.0f);
 }
@@ -45,8 +41,8 @@ AnimationPersonnage::~AnimationPersonnage()
 {
     delete basis;
     delete cube;
-    // basisPlan;
-    //delete camera;
+    delete basisPlan;
+    delete camera;
 }
 
 
@@ -62,14 +58,14 @@ AnimationPersonnage::initializeObjects()
 	// Chargement des shaders
     createShader( "Shaders/color" );
 
-    cout << "Shader color: ";
+    std::cout << "Shader color: ";
     if (useShader( "color" ))
     {
-        cout << "Loaded!" << endl;
+        std::cout << "Loaded!" << std::endl;
     }
     else
     {
-        cout << "NOT Loaded!" << endl;
+        std::cout << "NOT Loaded!" << std::endl;
     }
 
 	return true;
@@ -79,83 +75,80 @@ AnimationPersonnage::initializeObjects()
 void
 AnimationPersonnage::render()
 {
-	// Initialisation de la caméra
-    lookAt(camera->getMPosition().x,
-           camera->getMPosition().y,
-           camera->getMPosition().z,
-           camera->getMPosition().x + camera->getMOrientation().x,
-           camera->getMPosition().y + camera->getMOrientation().y,
-           camera->getMPosition().z + camera->getMOrientation().z);
+    glm::vec3 eye = glm::vec3(camera->getMPosition().x,
+                    camera->getMPosition().y,
+                    camera->getMPosition().z);
+    glm::vec3 center = glm::vec3(camera->getMPosition().x + camera->getMOrientation().x,
+                       camera->getMPosition().y + camera->getMOrientation().y,
+                       camera->getMPosition().z + camera->getMOrientation().z);
+    // Initialisation de la caméra
+    setLookAt(eye,center);
     setPerspective(45.0f,1.0f,1.0f,500.0f);
-    //setCameraPerspective(camera );
-    //setCameraOrtho(camera);
+
     // Rendu des objet
     pushMatrix();
-    //camera->translateY(shiftY);
-    //camera->translateZ(shiftZ);
-    //camera->rotateX(50.0f);
         basis->draw();
         basisPlan->draw();
 
-        rotate(rotateAngle,0.0f,1.0f,0.0f);
-        translate( 10.0, 5.0, 0.0 );
+        rotateFramework(rotateAngle,0.0f,1.0f,0.0f);
+        translateFramework( 10.0, 5.0, 0.0 );
 
         pushMatrix();
-        rotate(-rotateLeg,1.0f,0.0f,0.0f);
-        translate( -1.0, -2.5, 0 );
-        scale(0.5f,2.5f,0.5f);
+        rotateFramework(-rotateLeg,1.0f,0.0f,0.0f);
+        translateFramework( -1.0, -2.5, 0 );
+        scaleFramework(0.5f,2.5f,0.5f);
         cube->draw();
         popMatrix();
 
         pushMatrix();
-        rotate(rotateLeg,1.0f,0.0f,0.0f);
-        translate( 1.0, -2.5, 0 );
-        scale(0.5f,2.5f,0.5f);
+        rotateFramework(rotateLeg,1.0f,0.0f,0.0f);
+        translateFramework( 1.0, -2.5, 0 );
+        scaleFramework(0.5f,2.5f,0.5f);
         cube->draw();
         popMatrix();
 
-        translate( 0.0, 5.0, 0 );
+        translateFramework( 0.0, 5.0, 0 );
 
         pushMatrix();
-        translate( 0.0, -2.5, 0 );
-        scale(1.5f,2.5f,1.0f);
-        cube->draw();
-        popMatrix();
-
-        pushMatrix();
-        rotate(rotateLeg,1.0f,0.0f,0.0f);
-        translate( -2.0, -2.0, 0 );
-        scale(0.5f,2.0f,0.5f);
+        translateFramework( 0.0, -2.5, 0 );
+        scaleFramework(1.5f,2.5f,1.0f);
         cube->draw();
         popMatrix();
 
         pushMatrix();
-        rotate(-rotateLeg,1.0f,0.0f,0.0f);
-        translate( 2.0, -2.0, 0 );
-        scale(0.5f,2.0f,0.5f);
+        rotateFramework(rotateLeg,1.0f,0.0f,0.0f);
+        translateFramework( -2.0, -2.0, 0 );
+        scaleFramework(0.5f,2.0f,0.5f);
         cube->draw();
         popMatrix();
 
-        translate( 0.0, 1.0, 0 );
         pushMatrix();
-            rotate(rotateLeg,0.0f,1.0f,0.0f);
-            scale(1.0f,1.0f,1.0f);
+        rotateFramework(-rotateLeg,1.0f,0.0f,0.0f);
+        translateFramework( 2.0, -2.0, 0 );
+        scaleFramework(0.5f,2.0f,0.5f);
+        cube->draw();
+        popMatrix();
+
+        translateFramework( 0.0, 1.0, 0 );
+        pushMatrix();
+            rotateFramework(rotateLeg,0.0f,1.0f,0.0f);
+            scaleFramework(1.0f,1.0f,1.0f);
             cube->draw();
         popMatrix();
     popMatrix();
-    rotateAngle += 0.5f;
+    rotateAngle += 0.5f/10;
 
-    if(rotateLeg>15.0f){
+    if(rotateLeg>15.0f/40){
         rotateOrder = false;
     }
-    if(rotateLeg < -15.0f){
+    if(rotateLeg < -15.0f/40){
         rotateOrder = true;
     }
     if(rotateOrder){
-        rotateLeg += 0.5f;
+        rotateLeg += 0.5f/10;
     }
     else{
-        rotateLeg -= 0.5f;
+        rotateLeg -= 0.5f/10;
     }
 }
 
@@ -170,47 +163,47 @@ AnimationPersonnage::keyPressEvent( QKeyEvent* event )
             break;
 
         case Qt::Key_Left:
-        if(eyeAngleU < M_PI/2){
-            camera->rotateU(M_PI/(32*32),0.0f,1.0f,0.0f);
-            eyeAngleU += M_PI/(32*32);
+        if(eyeAngleU < 90.0f){
+            camera->rotateU(3.0f/100,0.0f,1.0f,0.0f);
+            eyeAngleU += 3.0f/100;
         }
         break;
 
         case Qt::Key_Right:
-        if(eyeAngleU > -M_PI/2){
-            camera->rotateU(-M_PI/(32*32),0.0f,1.0f,0.0f);
-            eyeAngleU -= M_PI/(32*32);
+        if(eyeAngleU > -90.0f){
+            camera->rotateU(-3.0f/100,0.0f,1.0f,0.0f);
+            eyeAngleU -= 3.0f/100;
         }
             break;
 
         case Qt::Key_Up:
-        if(eyeAngleR < M_PI/2){
-            camera->rotateR(M_PI/(32*32),0.0f,1.0f,0.0f);
-            eyeAngleR += M_PI/(32*32);
+        if(eyeAngleR < 90.0f){
+            camera->rotateR(3.0f/100,0.0f,1.0f,0.0f);
+            eyeAngleR += 3.0f/100;
         }
             break;
 
         case Qt::Key_Down:
-        if(eyeAngleR > -M_PI/2){
-            camera->rotateR(-M_PI/(32*32),0.0f,1.0f,0.0f);
-            eyeAngleR -= M_PI/(32*32);
+        if(eyeAngleR > -90.0f){
+            camera->rotateR(-3.0f/100,0.0f,1.0f,0.0f);
+            eyeAngleR -= 3.0f/100;
         }
             break;
 
         case Qt::Key_Z:
-            camera->translateO(0.5f,0.0f,1.0f,0.0f);
+            camera->translateO(0.5f/30,0.0f,1.0f,0.0f);
             break;
 
         case Qt::Key_S:
-             camera->translateO(-0.5f,0.0f,1.0f,0.0f);
+             camera->translateO(-0.5f/30,0.0f,1.0f,0.0f);
              break;
 
         case Qt::Key_Q:
-            camera->translateR(-0.5f,0.0f,1.0f,0.0f);
+            camera->translateR(0.5f/30,0.0f,1.0f,0.0f);
             break;
 
         case Qt::Key_D:
-            camera->translateR(0.5f,0.0f,1.0f,0.0f);
+            camera->translateR(-0.5f/30,0.0f,1.0f,0.0f);
             break;
     }
 }
@@ -218,8 +211,4 @@ AnimationPersonnage::keyPressEvent( QKeyEvent* event )
 void
 AnimationPersonnage::mouseMoveEvent( QMouseEvent* event )
 {
-    translateMouse.x = mouse.x - event->x();
-    translateMouse.y = mouse.y -  event->y();
-    //camera->setEye(translateMouse);
-    //camera->rotate(M_PI*translateMouse.length()/(100*100),0.0f,1.0f,0.0f);
 }

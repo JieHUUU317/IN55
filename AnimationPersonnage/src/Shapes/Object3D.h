@@ -3,10 +3,7 @@
 
 #include<src/Framework/AbstractFramework.h>
 #include"GL/glew.h"
-#include "GLM/fwd.hpp"
-#include "GLM/glm.hpp"
 
-using namespace glm;
 class Object3D
 {
 	public:

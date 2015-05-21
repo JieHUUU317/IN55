@@ -1,9 +1,7 @@
 #ifndef RandomNumberGenerator_h
 #define RandomNumberGenerator_h
 
-
-#include "Types.h"
-
+#include"Types.h"
 
 class RandomNumberGenerator
 {

@@ -1,5 +1,4 @@
-#include "Shapes/BasisPlan.h"
-
+#include "BasisPlan.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -50,6 +49,7 @@ BasisPlan::BasisPlan()
     }
 
 }
+
 
 void
 BasisPlan::drawShape(const char *shader_name)

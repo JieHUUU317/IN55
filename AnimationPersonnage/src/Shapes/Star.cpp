@@ -8,10 +8,7 @@
 // Last update: 2012-05-01
 //
 //*****************************************************************************
-
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include "Shapes/Star.h"
+#include "Star.h"
 
 #include <stdio.h>
 #include <string.h>

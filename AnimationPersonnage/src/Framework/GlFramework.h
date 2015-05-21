@@ -8,9 +8,7 @@
 #include <QLinkedList>
 #include <QImage>
 #include <vector>
-#include <string>
-
-using namespace glm;
+#include "LF_String.h"
 
 class GlFramework : public AbstractFramework
 {
@@ -25,20 +23,11 @@ class GlFramework : public AbstractFramework
         */
         GLint createShader( const char* shader_prefix );
 
-		/*!
-		*\brief Recalcule la matrice de projection en utilisant les valeurs \a fovY
-		*c'est à dire l'angle d'ouverture de la caméra selon l'axe Y (en degrés), le
-		*\a ratio entre la longueur et la largeur de la caméra, et les distances
-		*\a zNear et \a zFar correspondant respectivement aux distances de clipping
-		*proches et éloignées.
-         void setPerspective(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar);
-        *  void setOrtho(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar);
-		*/
         void setPerspective(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar);
 
         void setOrtho(GLfloat fovY, GLfloat ratio, GLfloat zNear, GLfloat zFar);
 
-        void lookAt(GLfloat eyeX, GLfloat eyeY, GLfloat eyeZ, GLfloat targetX, GLfloat targetY, GLfloat targetZ, GLfloat upX = 0.0f, GLfloat upY = 1.0f, GLfloat upZ = 0.0f);
+        void setLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up = glm::vec3(0.0,1.0,0.0));
 
     protected:
 		/*!
@@ -54,9 +43,9 @@ class GlFramework : public AbstractFramework
 
 
 	protected:
-        mat4 pProjMatrix, pViewMatrix, pModelMatrix;
-        mat4 pModelViewMatrix, pNormalMatrix, pMVPMatrix;
-        QLinkedList<mat4> pMatrixStack;
+        glm::mat4 pProjMatrix, pViewMatrix, pModelMatrix;
+        glm::mat4 pModelViewMatrix, pNormalMatrix, pMVPMatrix;
+        QLinkedList<glm::mat4> pMatrixStack;
 		std::vector<std::string> m_ShaderNames;
 		std::vector<GLint> m_Shader;
 		GLint m_CurrentShader;

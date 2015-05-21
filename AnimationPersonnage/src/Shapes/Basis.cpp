@@ -10,7 +10,7 @@
 //*****************************************************************************
 
 
-#include "Shapes/Basis.h"
+#include "Basis.h"
 
 
 GLfloat g_TabColors[] =
@@ -35,7 +35,6 @@ Basis::Basis( GLfloat length )
     m_TabVertices[10] = length;
     m_TabVertices[17] = length;
 }
-
 
 void
 Basis::drawShape( const char* shader_name )
