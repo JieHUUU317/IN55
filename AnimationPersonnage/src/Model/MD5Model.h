@@ -1,44 +1,58 @@
 #ifndef MD5MODEL
 #define MD5MODEL
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
+#include "src/Shapes/Object3D.h"
+#include <glm/gtc/type_ptr.hpp>
+#include"include/GL/glew.h"
+#include "MD5Animation.h"
+#include<src/Framework/AbstractFramework.h>
+#include"GL/glew.h"
 #include <vector>
 #include <string>
-class MD5Model
+class MD5Model:public Object3D
 {
 public:
     MD5Model();
-    virtual ~MD5Model();
-
+    //virtual ~MD5Model()
+    static void setFramework( AbstractFramework* );
     bool LoadModel( const std::string & filename );
     bool LoadAnim( const std::string& filename );
-    void Update( float fDeltaTime );
+    void Update( GLfloat fDeltaTime );
     void Render();
-
+     void drawShape( const char* shader_name );
 protected:
+
     typedef std::vector<glm::vec3> PositionBuffer;
     typedef std::vector<glm::vec3> NormalBuffer;
     typedef std::vector<glm::vec2> Tex2DBuffer;
     typedef std::vector<GLuint> IndexBuffer;
 
+    static AbstractFramework* m_Framework;
+    //To store the data of vertex in the MD5 mesh file
     struct Vertex
     {
         glm::vec3   m_Pos;
         glm::vec3   m_Normal;
-        glm::vec2   m_Tex0;
-        int         m_StartWeight;
-        int         m_WeightCount;
+        glm::vec2   m_Tex0;                 //define the texture coordinates of the vertex
+        int         m_StartWeight;         //start index of weight
+        int         m_WeightCount;       //number of weights associated with this vertex
     };
     typedef std::vector<Vertex> VertexList;
 
+    //To store the data of triangle (3 vertex) in the MD5 mesh file
     struct Triangle
     {
         int             m_Indices[3];
     };
     typedef std::vector<Triangle> TriangleList;
 
+    //To store the data of the weight
     struct Weight
     {
-        int             m_JointID;
-        float           m_Bias;
+        int             m_JointID; //index of joint
+        float           m_Bias;     //ratio that determines how much of the
+                                             //joint's orientation and position is applied to the final position
         glm::vec3       m_Pos;
     };
     typedef std::vector<Weight> WeightList;
@@ -98,7 +112,7 @@ private:
 
     MD5Animation        m_Animation;
 
-    glm::mat4x4         m_LocalToWorldMatrix;
+    glm::mat4        m_LocalToWorldMatrix;
 
 };
 

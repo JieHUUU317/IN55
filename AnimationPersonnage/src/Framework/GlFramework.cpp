@@ -41,7 +41,7 @@ GlFramework::init()
     if(error != GLEW_OK)
     {
         return false;
-//         QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec de l'initialization de GLEW: %1").arg(reinterpret_cast<const char *>(glewGetErrorString(error))));
+//QMessageBox::critical(this, trUtf8("Erreur"), trUtf8("Echec de l'initialization de GLEW: %1").arg(reinterpret_cast<const char *>(glewGetErrorString(error))));
         exit(-1);
     }
     Object3D::setFramework( this );

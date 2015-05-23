@@ -5,6 +5,7 @@
 #include "Shapes/Basis.h"
 #include "Shapes/Cubes.h"
 #include "Shapes/BasisPlan.h"
+#include "Model/MD5Model.h"
 #include <iostream>
 
 GLfloat shiftR = 0.0f;
@@ -14,14 +15,18 @@ GLfloat rotateLeg = 0.0f;
 boolean rotateOrder = true;
 GLfloat eyeAngleR = 0.0f;
 GLfloat eyeAngleU = 0.0f;
-
-const GLfloat g_AngleSpeed = 10.0f;
-
-
 Basis* basis;
 BasisPlan* basisPlan;
 TwoColorCube* cube;
 GlCamera* camera;
+MD5Model g_Model;
+GLfloat g_LighPos[] = { -39.749374, -6.182379, 46.334176, 1.0f };       // This is the position of the 'lamp' joint in the test mesh in object-local space
+GLfloat g_LightAmbient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+GLfloat g_LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat g_LightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat g_LighAttenuation0 = 1.0f;
+GLfloat g_LighAttenuation1 = 0.0f;
+GLfloat g_LighAttenuation2 = 0.0f;
 
 AnimationPersonnage::AnimationPersonnage()
 {
@@ -51,9 +56,17 @@ AnimationPersonnage::initializeObjects()
 {
 	// Fond gris
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+     glClearDepth( 1.0f );
 	glEnable( GL_DEPTH_TEST );
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-    glShadeModel(GL_FLAT);
+    glEnable( GL_TEXTURE_2D );
+    glShadeModel(GL_SMOOTH );
+    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, g_LightAmbient );
+    glLightfv( GL_LIGHT0, GL_DIFFUSE, g_LightDiffuse );
+    glLightfv( GL_LIGHT0, GL_SPECULAR, g_LightSpecular );
+    glLightf( GL_LIGHT0, GL_CONSTANT_ATTENUATION, g_LighAttenuation0 );
+    glLightf( GL_LIGHT0, GL_LINEAR_ATTENUATION, g_LighAttenuation1 );
+    glLightf( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, g_LighAttenuation2 );
+    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
 
 	// Chargement des shaders
     createShader( "Shaders/color" );
@@ -81,15 +94,21 @@ AnimationPersonnage::render()
     glm::vec3 center = glm::vec3(camera->getMPosition().x + camera->getMOrientation().x,
                        camera->getMPosition().y + camera->getMOrientation().y,
                        camera->getMPosition().z + camera->getMOrientation().z);
+
     // Initialisation de la caméra
     setLookAt(eye,center);
     setPerspective(45.0f,1.0f,1.0f,500.0f);
 
+    g_Model.LoadModel( "data/Person/boblampclean.md5mesh" );
+    g_Model.LoadAnim( "data/Person/boblampclean.md5anim" );
+
     // Rendu des objet
     pushMatrix();
-        basis->draw();
+        //basis->draw();
         basisPlan->draw();
 
+        g_Model.Render();
+/**
         rotateFramework(rotateAngle,0.0f,1.0f,0.0f);
         translateFramework( 10.0, 5.0, 0.0 );
 
@@ -134,8 +153,9 @@ AnimationPersonnage::render()
             rotateFramework(rotateLeg,0.0f,1.0f,0.0f);
             scaleFramework(1.0f,1.0f,1.0f);
             cube->draw();
-        popMatrix();
+        popMatrix();*/
     popMatrix();
+
     rotateAngle += 0.5f/10;
 
     if(rotateLeg>15.0f/40){

@@ -38,6 +38,7 @@ public:
     glm::vec3 getMPosition();
 
     glm::quat getMOrientation();
+
 };
 
 #endif

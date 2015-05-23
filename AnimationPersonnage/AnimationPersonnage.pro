@@ -8,9 +8,10 @@ QT       += core gui opengl
 CONFIG += console release
 TARGET = AnimationPersonnage
 TEMPLATE = app
-win32:LIBS += -L$$PWD/lib/ -lglew32
+win32:LIBS += -L$$PWD/lib/ -lglew32 -lSOIL
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
+
 
 OBJECTS_DIR = obj
 DESTDIR = release
@@ -31,7 +32,10 @@ src/main.cpp \
     src/Tools/RandomNumberGenerator.cpp \
     src/AnimationPersonnage.cpp \
     src/Framework/GlWindow.cpp \
-    src/Tools/LF_String.cpp
+    src/Tools/LF_String.cpp \
+    src/Model/MD5Model.cpp \
+    src/Model/MD5Animation.cpp \
+    src/Tools/Helpers.cpp
 
 
 HEADERS += \
@@ -52,7 +56,10 @@ HEADERS += \
     src/AnimationPersonnage.h \
     src/Framework/GlWindow.h \
     src/Tools/Types.h \
-    src/Tools/LF_String.h
+    src/Tools/LF_String.h \
+    src/Model/MD5Model.h \
+    src/Model/MD5Animation.h \
+    src/Tools/Helpers.h
 
 
 

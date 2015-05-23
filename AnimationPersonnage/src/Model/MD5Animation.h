@@ -1,11 +1,17 @@
 #ifndef MD5ANIMATION
 #define MD5ANIMATION
+#include "GLM/fwd.hpp"
+#include "GLM/glm.hpp"
+#include"include/GL/glew.h"
+#include <glm/gtc/type_ptr.hpp>
+#include "iostream"
+#include <vector>
 
 class MD5Animation
 {
 public:
     MD5Animation();
-    virtual ~MD5Animation();
+    //virtual ~MD5Animation();
 
     // Load an animation from the animation file
     bool LoadAnimation( const std::string& filename );

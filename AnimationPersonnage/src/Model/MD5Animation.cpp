@@ -1,21 +1,34 @@
 #include"MD5Animation.h"
+#include"boost/filesystem.hpp"
+#include "boost/filesystem/fstream.hpp"
+#include "src/Tools/Helpers.h"
+#include "SOIL/SOIL.h"
 
-using namespace std;
-
+MD5Animation::MD5Animation()
+: m_iMD5Version( 0 )
+, m_iNumFrames( 0 )
+, m_iNumJoints( 0 )
+, m_iFramRate( 0 )
+, m_iNumAnimatedComponents( 0 )
+, m_fAnimDuration( 0 )
+, m_fFrameDuration( 0 )
+, m_fAnimTime( 0 )
+{
+}
 bool MD5Animation::LoadAnimation( const std::string& filename )
 {
-    if ( !fs::exists(filename) )
+    if ( !boost::filesystem::exists(filename) )
     {
-        std::cerr << "MD5Animation::LoadAnimation: Failed to find file: " << filename << std::endl;
+        std::cout << "MD5Animation::LoadAnimation: Failed to find file: " << filename << std::endl;
         return false;
     }
 
-    fs::path filePath = filename;
+    boost::filesystem::path filePath = filename;
 
     std::string param;
     std::string junk;   // Read junk from the file
 
-    fs::ifstream file(filename);
+    boost::filesystem::ifstream file(filename);
     int fileLength = GetFileLength( file );
     assert( fileLength > 0 );
 
@@ -113,44 +126,43 @@ bool MD5Animation::LoadAnimation( const std::string& filename )
             file.ignore( fileLength, '\n' );
         }
         else if ( param == "frame" )
-           {
-               FrameData frame;
-               file >> frame.m_iFrameID >> junk; // Read in the '{' character
-               file.ignore(fileLength, '\n' );
+        {
+            FrameData frame;
+            file >> frame.m_iFrameID >> junk; // Read in the '{' character
+            file.ignore(fileLength, '\n' );
 
-               for ( int i = 0; i < m_iNumAnimatedComponents; ++i )
-               {
-                   float frameData;
-                   file >> frameData;
-                   frame.m_FrameData.push_back(frameData);
-               }
+            for ( int i = 0; i < m_iNumAnimatedComponents; ++i )
+            {
+                float frameData;
+                file >> frameData;
+                frame.m_FrameData.push_back(frameData);
+            }
 
-               m_Frames.push_back(frame);
+            m_Frames.push_back(frame);
 
-               // Build a skeleton for this frame
-               BuildFrameSkeleton( m_Skeletons, m_JointInfos, m_BaseFrames, frame );
+            // Build a skeleton for this frame
+            BuildFrameSkeleton( m_Skeletons, m_JointInfos, m_BaseFrames, frame );
 
-               file >> junk; // Read in the '}' character
-               file.ignore(fileLength, '\n' );
-           }
+            file >> junk; // Read in the '}' character
+            file.ignore(fileLength, '\n' );
+        }
+        file >> param;
+    } // while ( !file.eof )
+       // Make sure there are enough joints for the animated skeleton.
+    m_AnimatedSkeleton.m_Joints.assign(m_iNumJoints, SkeletonJoint() );
 
-           file >> param;
-       } // while ( !file.eof )
-    // Make sure there are enough joints for the animated skeleton.
-        m_AnimatedSkeleton.m_Joints.assign(m_iNumJoints, SkeletonJoint() );
+    m_fFrameDuration = 1.0f / (float)m_iFramRate;
+    m_fAnimDuration = ( m_fFrameDuration * (float)m_iNumFrames );
+    m_fAnimTime = 0.0f;
 
-        m_fFrameDuration = 1.0f / (float)m_iFramRate;
-        m_fAnimDuration = ( m_fFrameDuration * (float)m_iNumFrames );
-        m_fAnimTime = 0.0f;
+    assert( m_JointInfos.size() == m_iNumJoints );
+    assert( m_Bounds.size() == m_iNumFrames );
+    assert( m_BaseFrames.size() == m_iNumJoints );
+    assert( m_Frames.size() == m_iNumFrames );
+    assert( m_Skeletons.size() == m_iNumFrames );
 
-        assert( m_JointInfos.size() == m_iNumJoints );
-        assert( m_Bounds.size() == m_iNumFrames );
-        assert( m_BaseFrames.size() == m_iNumJoints );
-        assert( m_Frames.size() == m_iNumFrames );
-        assert( m_Skeletons.size() == m_iNumFrames );
-
-        return true;
-    }
+    return true;
+}
 
 void MD5Animation::BuildFrameSkeleton( FrameSkeletonList& skeletons, const JointInfoList& jointInfos, const BaseFrameList& baseFrames, const FrameData& frameData )
 {
@@ -191,23 +203,20 @@ void MD5Animation::BuildFrameSkeleton( FrameSkeletonList& skeletons, const Joint
             animatedJoint.m_Orient.z = frameData.m_FrameData[ jointInfo.m_StartIndex + j++ ];
         }
         ComputeQuatW( animatedJoint.m_Orient );
+        if ( animatedJoint.m_Parent >= 0 ) // Has a parent joint
+        {
+            SkeletonJoint& parentJoint = skeleton.m_Joints[animatedJoint.m_Parent];
+            glm::vec3 rotPos = parentJoint.m_Orient * animatedJoint.m_Pos;
 
-                if ( animatedJoint.m_Parent >= 0 ) // Has a parent joint
-                {
-                    SkeletonJoint& parentJoint = skeleton.m_Joints[animatedJoint.m_Parent];
-                    glm::vec3 rotPos = parentJoint.m_Orient * animatedJoint.m_Pos;
+            animatedJoint.m_Pos = parentJoint.m_Pos + rotPos;
+            animatedJoint.m_Orient = parentJoint.m_Orient * animatedJoint.m_Orient;
 
-                    animatedJoint.m_Pos = parentJoint.m_Pos + rotPos;
-                    animatedJoint.m_Orient = parentJoint.m_Orient * animatedJoint.m_Orient;
-
-                    animatedJoint.m_Orient = glm::normalize( animatedJoint.m_Orient );
-                }
-
-                skeleton.m_Joints.push_back(animatedJoint);
-            }
-
-            skeletons.push_back(skeleton);
+            animatedJoint.m_Orient = glm::normalize( animatedJoint.m_Orient );
         }
+        skeleton.m_Joints.push_back(animatedJoint);
+    }
+    skeletons.push_back(skeleton);
+}
 
 
 void MD5Animation::Update( float fDeltaTime )
@@ -241,72 +250,53 @@ void MD5Animation::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const Fra
         const SkeletonJoint& joint1 = skeleton1.m_Joints[i];
 
         finalJoint.m_Parent = joint0.m_Parent;
-
-        finalJoint.m_Pos = glm::lerp( joint0.m_Pos, joint1.m_Pos, fInterpolate );
+        glm::quat pos = glm::lerp(glm::quat(joint0.m_Pos.x,joint0.m_Pos.y,joint0.m_Pos.z, 0.0f), glm::quat(joint1.m_Pos.x,joint0.m_Pos.y,joint0.m_Pos.z, 0.0f), fInterpolate);
+        finalJoint.m_Pos = glm::vec3(pos.x,pos.y,pos.z);
         finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
     }
 }
 
-void MD5Model::Update( float fDeltaTime )
+void MD5Animation::Render()
 {
-    if ( m_bHasAnimation )
-    {
-        m_Animation.Update(fDeltaTime);
-        const MD5Animation::FrameSkeleton& skeleton = m_Animation.GetSkeleton();
+    glPointSize( 5.0f );
+    glColor3f( 1.0f, 0.0f, 0.0f );
 
-        for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
+    glPushAttrib( GL_ENABLE_BIT );
+
+    glDisable(GL_LIGHTING );
+    glDisable( GL_DEPTH_TEST );
+
+    const SkeletonJointList& joints = m_AnimatedSkeleton.m_Joints;
+
+    // Draw the joint positions
+    glBegin( GL_POINTS );
+    {
+        for ( unsigned int i = 0; i < joints.size(); ++i )
         {
-            PrepareMesh( m_Meshes[i], skeleton );
+            glVertex3fv( glm::value_ptr(joints[i].m_Pos) );
         }
     }
+    glEnd();
+    // Draw the bones
+    glColor3f( 0.0f, 1.0f, 0.0f );
+    glBegin( GL_LINES );
+    {
+        for ( unsigned int i = 0; i < joints.size(); ++i )
+        {
+            const SkeletonJoint& j0 = joints[i];
+            if ( j0.m_Parent != -1 )
+            {
+                const SkeletonJoint& j1 = joints[j0.m_Parent];
+                glVertex3fv( glm::value_ptr(j0.m_Pos) );
+                glVertex3fv( glm::value_ptr(j1.m_Pos) );
+            }
+        }
+    }
+    glEnd();
+    glPopAttrib();
 }
 
 
-bool MD5Model::PrepareMesh( Mesh& mesh, const MD5Animation::FrameSkeleton& skel )
-{
-    for ( unsigned int i = 0; i < mesh.m_Verts.size(); ++i )
-    {
-        const Vertex& vert = mesh.m_Verts[i];
-        glm::vec3& pos = mesh.m_PositionBuffer[i];
-        glm::vec3& normal = mesh.m_NormalBuffer[i];
-
-        pos = glm::vec3(0);
-        normal = glm::vec3(0);
-
-        for ( int j = 0; j < vert.m_WeightCount; ++j )
-        {
-            const Weight& weight = mesh.m_Weights[vert.m_StartWeight + j];
-            const MD5Animation::SkeletonJoint& joint = skel.m_Joints[weight.m_JointID];
-
-            glm::vec3 rotPos = joint.m_Orient * weight.m_Pos;
-            pos += ( joint.m_Pos + rotPos ) * weight.m_Bias;
-
-            normal += ( joint.m_Orient * vert.m_Normal ) * weight.m_Bias;
-        }
-    }
-    return true;
-}
 
 
-bool MD5Model::CheckAnimation( const MD5Animation& animation ) const
-{
-    if ( m_iNumJoints != animation.GetNumJoints() )
-    {
-        return false;
-    }
 
-    // Check to make sure the joints match up
-    for ( unsigned int i = 0; i < m_Joints.size(); ++i )
-    {
-        const Joint& meshJoint = m_Joints[i];
-        const MD5Animation::JointInfo& animJoint = animation.GetJointInfo( i );
-
-        if ( meshJoint.m_Name != animJoint.m_Name ||
-             meshJoint.m_ParentID != animJoint.m_ParentID )
-        {
-            return false;
-        }
-    }
-
-    return true;
-}

@@ -1,23 +1,45 @@
 #include"MD5Model.h"
+#include"boost/filesystem.hpp"
+#include "boost/filesystem/fstream.hpp"
+#include "src/Tools/Helpers.h"
+#include "SOIL/SOIL.h"
 
-using namespace  std;
+AbstractFramework* MD5Model::m_Framework = NULL;
+
+MD5Model::MD5Model()
+: m_iMD5Version(-1)
+, m_iNumJoints(0)
+, m_iNumMeshes(0)
+, m_bHasAnimation(false)
+, m_LocalToWorldMatrix(1){}
+
+void
+MD5Model::setFramework( AbstractFramework* fw )
+{
+    m_Framework = fw;
+}
+
+void
+MD5Model::drawShape( const char* shader_name )
+{
+}
 
 bool MD5Model::LoadModel( const std::string& filename )
 {
-    if ( !fs::exists(filename) )
+    if(!boost::filesystem::exists(filename))
     {
-        std::cerr << "MD5Model::LoadModel: Failed to find file: " << filename << std::endl;
+        std::cout << "MD5Model::LoadModel: Failed to find file: " << filename << std::endl;
         return false;
     }
+    boost::filesystem::path  filePath = filename;
 
-    fs::path filePath = filename;
     // store the parent path used for loading images relative to this file.
-    fs::path parent_path = filePath.parent_path();
+    boost::filesystem::path parent_path = filePath.parent_path();
 
-    std::string param;
+    std::string param; //Store the current parameter in the parsed file
     std::string junk;   // Read junk from the file
 
-    fs::ifstream file(filename);
+    boost::filesystem::ifstream file(filename);
     int fileLength = GetFileLength( file );
     assert( fileLength > 0 );
     m_Joints.clear();
@@ -34,7 +56,8 @@ bool MD5Model::LoadModel( const std::string& filename )
         }
         else if ( param == "commandline" )
         {
-            IgnoreLine(file, fileLength ); // Ignore the contents of the line
+             // Ignore the contents of the line
+               IgnoreLine(file, fileLength );
         }
         else if ( param == "numJoints" )
         {
@@ -78,9 +101,9 @@ bool MD5Model::LoadModel( const std::string& filename )
                 {
                     file >> mesh.m_Shader;
                     RemoveQuotes( mesh.m_Shader );
-
-                    fs::path shaderPath( mesh.m_Shader );
-                    fs::path texturePath;
+                    //the path of shader and texture
+                    boost::filesystem::path shaderPath( mesh.m_Shader );
+                    boost::filesystem::path texturePath;
                     if ( shaderPath.has_parent_path() )
                     {
                         texturePath = shaderPath;
@@ -134,23 +157,6 @@ bool MD5Model::LoadModel( const std::string& filename )
                         mesh.m_IndexBuffer.push_back( (GLuint)tri.m_Indices[2] );
                     }
                 }
-                else if ( param == "numtris" )
-                {
-                    file >> numTris;
-                    IgnoreLine(file, fileLength);
-                    for ( int i = 0; i < numTris; ++i )
-                    {
-                        Triangle tri;
-                        file >> junk >> junk >> tri.m_Indices[0] >> tri.m_Indices[1] >> tri.m_Indices[2];
-
-                        IgnoreLine( file, fileLength );
-
-                        mesh.m_Tris.push_back(tri);
-                        mesh.m_IndexBuffer.push_back( (GLuint)tri.m_Indices[0] );
-                        mesh.m_IndexBuffer.push_back( (GLuint)tri.m_Indices[1] );
-                        mesh.m_IndexBuffer.push_back( (GLuint)tri.m_Indices[2] );
-                    }
-                }
                 else if ( param == "numweights" )
                 {
                     file >> numWeights;
@@ -166,29 +172,61 @@ bool MD5Model::LoadModel( const std::string& filename )
                     }
                 }
                 else
-                                {
-                                    IgnoreLine(file, fileLength);
-                                }
-
-                                file >> param;
-                            }
-
-                            PrepareMesh(mesh);
-                            PrepareNormals(mesh);
-
-                            m_Meshes.push_back(mesh);
-
-                        }
-
-                        file >> param;
-                    }
-
-                    assert( m_Joints.size() == m_iNumJoints );
-                    assert( m_Meshes.size() == m_iNumMeshes );
-
-                    return true;
+                {
+                    IgnoreLine(file, fileLength);
                 }
+                file >> param;
+            }
+            PrepareMesh(mesh);
+            PrepareNormals(mesh);
+            m_Meshes.push_back(mesh);
+        }
 
+        file >> param;
+    }
+    assert( m_Joints.size() == m_iNumJoints );
+    assert( m_Meshes.size() == m_iNumMeshes );
+
+    return true;
+}
+
+bool MD5Model::LoadAnim( const std::string& filename )
+{
+    if ( m_Animation.LoadAnimation( filename ) )
+    {
+        // Check to make sure the animation is appropriate for this model
+        m_bHasAnimation = CheckAnimation( m_Animation );
+    }
+
+    return m_bHasAnimation;
+}
+
+
+bool MD5Model::CheckAnimation( const MD5Animation& animation ) const
+{
+    if ( m_iNumJoints != animation.GetNumJoints() )
+    {
+        return false;
+    }
+
+    // Check to make sure the joints match up
+    for ( unsigned int i = 0; i < m_Joints.size(); ++i )
+    {
+        const Joint& meshJoint = m_Joints[i];
+        const MD5Animation::JointInfo& animJoint = animation.GetJointInfo( i );
+
+        if ( meshJoint.m_Name != animJoint.m_Name ||
+             meshJoint.m_ParentID != animJoint.m_ParentID )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Compute the position of the vertices in object local space
+// in the skeleton's bind pose
 bool MD5Model::PrepareMesh( Mesh& mesh )
 {
     mesh.m_PositionBuffer.clear();
@@ -221,6 +259,33 @@ bool MD5Model::PrepareMesh( Mesh& mesh )
     return true;
 }
 
+bool MD5Model::PrepareMesh( Mesh& mesh, const MD5Animation::FrameSkeleton& skel )
+{
+    for ( unsigned int i = 0; i < mesh.m_Verts.size(); ++i )
+    {
+        const Vertex& vert = mesh.m_Verts[i];
+        glm::vec3& pos = mesh.m_PositionBuffer[i];
+        glm::vec3& normal = mesh.m_NormalBuffer[i];
+
+        pos = glm::vec3(0);
+        normal = glm::vec3(0);
+
+        for ( int j = 0; j < vert.m_WeightCount; ++j )
+        {
+            const Weight& weight = mesh.m_Weights[vert.m_StartWeight + j];
+            const MD5Animation::SkeletonJoint& joint = skel.m_Joints[weight.m_JointID];
+
+            glm::vec3 rotPos = joint.m_Orient * weight.m_Pos;
+            pos += ( joint.m_Pos + rotPos ) * weight.m_Bias;
+
+            normal += ( joint.m_Orient * vert.m_Normal ) * weight.m_Bias;
+        }
+    }
+    return true;
+}
+
+
+// Compute the vertex normals in the Mesh's bind pose
 bool MD5Model::PrepareNormals( Mesh& mesh )
 {
     mesh.m_NormalBuffer.clear();
@@ -263,10 +328,25 @@ bool MD5Model::PrepareNormals( Mesh& mesh )
     return true;
 }
 
+
+void MD5Model::Update( float fDeltaTime )
+{
+    if ( m_bHasAnimation )
+    {
+        m_Animation.Update(fDeltaTime);
+        const MD5Animation::FrameSkeleton& skeleton = m_Animation.GetSkeleton();
+
+        for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
+        {
+            PrepareMesh( m_Meshes[i], skeleton );
+        }
+    }
+}
+
 void MD5Model::Render()
 {
     glPushMatrix();
-    glMultMatrixf( glm::value_ptr(m_LocalToWorldMatrix) );
+   // glMultMatrixf( glm::value_ptr(m_LocalToWorldMatrix) );
 
     // Render the meshes
     for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
@@ -274,11 +354,12 @@ void MD5Model::Render()
         RenderMesh( m_Meshes[i] );
     }
 
-    m_Animation.Render();
+       // RenderSkeleton(m_Joints);
+    //m_Animation.Render();
 
     for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
     {
-        RenderNormals( m_Meshes[i] );
+        //RenderNormals( m_Meshes[i] );
     }
 
     glPopMatrix();
@@ -286,7 +367,14 @@ void MD5Model::Render()
 
 void MD5Model::RenderMesh( const Mesh& mesh )
 {
-    glColor3f( 1.0f, 1.0f, 1.0f );
+    if (m_Framework->useShader( "color" ))
+    {
+        /**
+        m_Framework->computeAncillaryMatrices();
+    */
+        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+        m_Framework->transmitMVP( var_id );
+    }
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_TEXTURE_COORD_ARRAY );
     glEnableClientState( GL_NORMAL_ARRAY );
@@ -305,4 +393,81 @@ void MD5Model::RenderMesh( const Mesh& mesh )
     glBindTexture( GL_TEXTURE_2D, 0 );
 }
 
+void MD5Model::RenderNormals(  const Mesh& mesh )
+{
+    if (m_Framework->useShader( "color" ))
+    {
+        m_Framework->computeAncillaryMatrices();
+        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+        m_Framework->transmitMVP( var_id );
+    }
+    glPushAttrib( GL_ENABLE_BIT );
+    glDisable( GL_LIGHTING );
+
+    glColor3f( 1.0f, 1.0f, 0.0f );// Yellow
+
+    glBegin( GL_LINES );
+    {
+        for ( unsigned int i = 0; i < mesh.m_PositionBuffer.size(); ++i )
+        {
+            glm::vec3 p0 = mesh.m_PositionBuffer[i];
+            glm::vec3 p1 = ( mesh.m_PositionBuffer[i] + mesh.m_NormalBuffer[i] );
+
+            glVertex3fv( glm::value_ptr(p0) );
+            glVertex3fv( glm::value_ptr(p1) );
+        }
+    }
+    glEnd();
+
+    glPopAttrib();
+}
+
+
+void MD5Model::RenderSkeleton( const JointList& joints )
+{
+/**
+    if (m_Framework->useShader( "color" ))
+    {
+        m_Framework->computeAncillaryMatrices();
+        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+        m_Framework->transmitMVP( var_id );
+    }*/
+    glPointSize( 5.0f );
+    glColor3f( 1.0f, 0.0f, 0.0f );
+
+    glPushAttrib( GL_ENABLE_BIT );
+
+    glDisable(GL_LIGHTING );
+    glDisable( GL_DEPTH_TEST );
+
+    // Draw the joint positions
+    glBegin( GL_POINTS );
+    {
+        for ( unsigned int i = 0; i < joints.size(); ++i )
+        {
+            glVertex3fv( glm::value_ptr(joints[i].m_Pos) );
+        }
+    }
+    glEnd();
+
+    // Draw the bones
+    glColor3f( 0.0f, 1.0f, 0.0f );
+    glBegin( GL_LINES );
+    {
+        for ( unsigned int i = 0; i < joints.size(); ++i )
+        {
+            const Joint& j0 = joints[i];
+            if ( j0.m_ParentID != -1 )
+            {
+                const Joint& j1 = joints[j0.m_ParentID];
+                glVertex3fv( glm::value_ptr(j0.m_Pos) );
+                glVertex3fv( glm::value_ptr(j1.m_Pos) );
+            }
+        }
+    }
+    glEnd();
+
+    glPopAttrib();
+
+}
 
