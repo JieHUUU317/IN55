@@ -13,6 +13,8 @@ class AbstractFramework
 		virtual bool useShader( GLint shader_id ) = 0;
         virtual bool useShader( const char* shader_name ) = 0;
 
+        //virtual void transmitMVPRightHanded( GLuint var_id )=0;
+
 		/*!
 		*\brief Id du shader actuel.
 		*/
@@ -87,6 +89,8 @@ class AbstractFramework
 
 		virtual void computeAncillaryMatrices() = 0;
 
+        virtual void computeAncillaryMatricesRight()=0;
+
 		virtual GLuint createTexture( const char* filename ) = 0;
 };
 
@@ -95,7 +99,7 @@ class AbstractFramework
     bool useShader( GLint shader_id ); \
 	bool useShader( const char* shader_name ); \
 	GLint getCurrentShaderId() const; \
-	void transmitMVP( GLuint var_id ); \
+    void transmitMVP( GLuint var_id ); \
     void transmitMV( GLuint var_id );\
 	void transmitNM( GLuint var_id ); \
 	void transmitM( GLuint var_id ); \
@@ -107,8 +111,9 @@ class AbstractFramework
     void translateFramework(GLfloat x, GLfloat y, GLfloat z); \
     void rotateFramework(GLfloat angle, GLfloat x, GLfloat y, GLfloat z); \
     void scaleFramework(GLfloat x, GLfloat y, GLfloat z); \
-	void computeAncillaryMatrices(); \
-	GLuint createTexture( const char* filename ); \
+    void computeAncillaryMatrices(); \
+    GLuint createTexture( const char* filename ); \
+    void computeAncillaryMatricesRight(); \
 
 
 #endif

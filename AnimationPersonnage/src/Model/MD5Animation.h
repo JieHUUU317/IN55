@@ -12,13 +12,13 @@ class MD5Animation
 public:
     MD5Animation();
     //virtual ~MD5Animation();
-
     // Load an animation from the animation file
     bool LoadAnimation( const std::string& filename );
     // Update this animation's joint set.
     void Update( float fDeltaTime );
     // Draw the animated skeleton
     void Render();
+
 
     // The JointInfo stores the information necessary to build the
     // skeletons for each frame

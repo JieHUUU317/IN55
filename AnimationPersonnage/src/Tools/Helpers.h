@@ -18,6 +18,8 @@ void IgnoreLine( std::istream& file, int length);
 // This method assumes the quaternion is of unit length.
 void ComputeQuatW( glm::quat& quat);
 
+glm::mat4 ComputeRightHandCoordinate(glm::mat4 matrix);
+
 // Helper class to count frame time
 class ElapsedTime
 {

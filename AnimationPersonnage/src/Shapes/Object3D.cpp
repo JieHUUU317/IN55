@@ -18,6 +18,7 @@ Object3D::draw()
     {
         m_Framework->computeAncillaryMatrices();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+        GLint var_id2 = glGetUniformLocation( m_Framework->getCurrentShaderId(),  "tex" );
         m_Framework->transmitMVP( var_id );
 
         drawShape( "color" );

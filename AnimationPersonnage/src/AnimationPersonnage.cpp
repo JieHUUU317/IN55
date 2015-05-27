@@ -7,6 +7,9 @@
 #include "Shapes/BasisPlan.h"
 #include "Model/MD5Model.h"
 #include <iostream>
+#include <QApplication>
+#include <QDrag>
+#include <QMimeData>
 
 GLfloat shiftR = 0.0f;
 GLfloat shiftN = 0.0f;
@@ -15,11 +18,13 @@ GLfloat rotateLeg = 0.0f;
 boolean rotateOrder = true;
 GLfloat eyeAngleR = 0.0f;
 GLfloat eyeAngleU = 0.0f;
+QPoint dragStartPosition;
+
 Basis* basis;
 BasisPlan* basisPlan;
 TwoColorCube* cube;
 GlCamera* camera;
-MD5Model g_Model;
+MD5Model* g_Model;
 GLfloat g_LighPos[] = { -39.749374, -6.182379, 46.334176, 1.0f };       // This is the position of the 'lamp' joint in the test mesh in object-local space
 GLfloat g_LightAmbient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 GLfloat g_LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -37,6 +42,7 @@ AnimationPersonnage::AnimationPersonnage()
     cube = new TwoColorCube();
     camera = new GlCamera(100.0f,30.0f,100.0f,
                          0.0f,0.0f,0.0f);
+    g_Model = new MD5Model();
     camera->setFOV(180.0f);
     camera->setPlanes(0.1f, 800.0f);
 }
@@ -55,11 +61,11 @@ bool
 AnimationPersonnage::initializeObjects()
 {
 	// Fond gris
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-     glClearDepth( 1.0f );
+    glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
+    glClearDepth( 1.0f );
 	glEnable( GL_DEPTH_TEST );
+    glShadeModel( GL_SMOOTH );
     glEnable( GL_TEXTURE_2D );
-    glShadeModel(GL_SMOOTH );
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, g_LightAmbient );
     glLightfv( GL_LIGHT0, GL_DIFFUSE, g_LightDiffuse );
     glLightfv( GL_LIGHT0, GL_SPECULAR, g_LightSpecular );
@@ -68,7 +74,7 @@ AnimationPersonnage::initializeObjects()
     glLightf( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, g_LighAttenuation2 );
     glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
 
-	// Chargement des shaders
+    // Chargement des shaders
     createShader( "Shaders/color" );
 
     std::cout << "Shader color: ";
@@ -80,11 +86,13 @@ AnimationPersonnage::initializeObjects()
     {
         std::cout << "NOT Loaded!" << std::endl;
     }
-
+    g_Model->LoadModel( "data/Person/boblampclean.md5mesh" );
+    g_Model->LoadAnim( "data/Person/boblampclean.md5anim" );
 	return true;
 }
-
-
+void AnimationPersonnage::updateAnimation(float fDeltaTime){
+    g_Model->Update( fDeltaTime );
+}
 void
 AnimationPersonnage::render()
 {
@@ -98,16 +106,14 @@ AnimationPersonnage::render()
     // Initialisation de la caméra
     setLookAt(eye,center);
     setPerspective(45.0f,1.0f,1.0f,500.0f);
-
-    g_Model.LoadModel( "data/Person/boblampclean.md5mesh" );
-    g_Model.LoadAnim( "data/Person/boblampclean.md5anim" );
-
     // Rendu des objet
     pushMatrix();
         //basis->draw();
         basisPlan->draw();
-
-        g_Model.Render();
+        glLightfv( GL_LIGHT0, GL_POSITION, g_LighPos );
+        pushMatrix();
+        g_Model->Render();
+        popMatrix();
 /**
         rotateFramework(rotateAngle,0.0f,1.0f,0.0f);
         translateFramework( 10.0, 5.0, 0.0 );
@@ -153,9 +159,9 @@ AnimationPersonnage::render()
             rotateFramework(rotateLeg,0.0f,1.0f,0.0f);
             scaleFramework(1.0f,1.0f,1.0f);
             cube->draw();
-        popMatrix();*/
+        popMatrix();
+       */
     popMatrix();
-
     rotateAngle += 0.5f/10;
 
     if(rotateLeg>15.0f/40){
@@ -170,6 +176,7 @@ AnimationPersonnage::render()
     else{
         rotateLeg -= 0.5f/10;
     }
+
 }
 
 
@@ -231,4 +238,17 @@ AnimationPersonnage::keyPressEvent( QKeyEvent* event )
 void
 AnimationPersonnage::mouseMoveEvent( QMouseEvent* event )
 {
+    if (!(event->buttons() & Qt::LeftButton))
+            return;
+    QPoint p = event->pos()-dragStartPosition;
+    glm::vec2 delta = glm::vec2(-p.x(),-p.y());
+    glm::quat rotX = glm::angleAxis<float>( glm::radians(delta.y) * 0.005f, glm::vec3(1, 0, 0) );
+    glm::quat rotY = glm::angleAxis<float>( glm::radians(delta.x) * 0.005f, glm::vec3(0, 1, 0) );
+    camera->rotate(rotX,rotY);
+}
+
+void AnimationPersonnage::mousePressEvent(QMouseEvent *event)
+{
+     if (event->button() == Qt::LeftButton)
+         dragStartPosition = event->pos();
 }

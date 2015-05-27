@@ -18,11 +18,14 @@ class AnimationPersonnage : public GlWindow
 		/*!
 		*\brief Rendu de la scène.
 		*/
+        void updateAnimation(float fDeltaTime);
 		void render();
 
 		void keyPressEvent(QKeyEvent *);
 
-        void mouseMoveEvent(QMouseEvent *event); \
+        void mouseMoveEvent(QMouseEvent *event);
+
+        void mousePressEvent(QMouseEvent *event);
 };
 
 

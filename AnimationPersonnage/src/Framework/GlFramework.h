@@ -16,7 +16,7 @@ class GlFramework : public AbstractFramework
         GlFramework();
         ~GlFramework();
 
-		ABSTRACT_FRAMEWORK_INTERFACE
+        ABSTRACT_FRAMEWORK_INTERFACE
 
         /*!
         *\brief Fonction de création d'un shader.

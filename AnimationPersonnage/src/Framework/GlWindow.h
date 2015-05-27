@@ -21,6 +21,8 @@ class GlWindow : public QGLWidget, public GlFramework
 
 		virtual void render() = 0;
 
+        virtual void updateAnimation(float deltaT)=0;
+
 		/*!
 		*\brief Fonction d'initialization d'OpenGL, appelée à la création du
 		*contexte de rendu.
@@ -42,7 +44,9 @@ class GlWindow : public QGLWidget, public GlFramework
 #define INTERFACE_GLWINDOW \
 	bool initializeObjects(); \
 	void render(); \
+    void updateAnimation(float deltaT);\
 	void keyPressEvent( QKeyEvent* event ); \
-
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 #endif

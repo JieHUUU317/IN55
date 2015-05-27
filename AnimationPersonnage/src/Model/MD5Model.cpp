@@ -4,24 +4,20 @@
 #include "src/Tools/Helpers.h"
 #include "SOIL/SOIL.h"
 
-AbstractFramework* MD5Model::m_Framework = NULL;
-
 MD5Model::MD5Model()
 : m_iMD5Version(-1)
 , m_iNumJoints(0)
 , m_iNumMeshes(0)
 , m_bHasAnimation(false)
-, m_LocalToWorldMatrix(1){}
+, m_LocalToWorldMatrix(1){
+}
+
+AbstractFramework* MD5Model::m_Framework = NULL;
 
 void
 MD5Model::setFramework( AbstractFramework* fw )
 {
     m_Framework = fw;
-}
-
-void
-MD5Model::drawShape( const char* shader_name )
-{
 }
 
 bool MD5Model::LoadModel( const std::string& filename )
@@ -35,7 +31,6 @@ bool MD5Model::LoadModel( const std::string& filename )
 
     // store the parent path used for loading images relative to this file.
     boost::filesystem::path parent_path = filePath.parent_path();
-
     std::string param; //Store the current parameter in the parsed file
     std::string junk;   // Read junk from the file
 
@@ -44,7 +39,6 @@ bool MD5Model::LoadModel( const std::string& filename )
     assert( fileLength > 0 );
     m_Joints.clear();
     m_Meshes.clear();
-
     file >> param;
 
     while ( !file.eof() )
@@ -79,12 +73,14 @@ bool MD5Model::LoadModel( const std::string& filename )
                      >> joint.m_Pos.x >> joint.m_Pos.y >> joint.m_Pos.z >> junk >> junk
                      >> joint.m_Orient.x >> joint.m_Orient.y >> joint.m_Orient.z >> junk;
 
+
                 RemoveQuotes( joint.m_Name );
                 ComputeQuatW( joint.m_Orient );
 
                 m_Joints.push_back(joint);
                 // Ignore everything else on the line up to the end-of-line character.
                 IgnoreLine( file, fileLength );
+
             }
             file >> junk; // Read the '}' character
         }
@@ -119,7 +115,8 @@ bool MD5Model::LoadModel( const std::string& filename )
                     }
 
                     mesh.m_TexID = SOIL_load_OGL_texture( texturePath.string().c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS );
-
+                    shaderPath.replace_extension();
+                    mesh.m_Shader = shaderPath.string();
                     file.ignore(fileLength, '\n' ); // Ignore everything else on the line
                 }
                 else if ( param == "numverts")
@@ -345,102 +342,78 @@ void MD5Model::Update( float fDeltaTime )
 
 void MD5Model::Render()
 {
-    glPushMatrix();
-   // glMultMatrixf( glm::value_ptr(m_LocalToWorldMatrix) );
-
     // Render the meshes
     for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
     {
         RenderMesh( m_Meshes[i] );
     }
 
-       // RenderSkeleton(m_Joints);
-    //m_Animation.Render();
+    m_Animation.Render();
 
     for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
     {
         //RenderNormals( m_Meshes[i] );
     }
-
-    glPopMatrix();
 }
 
 void MD5Model::RenderMesh( const Mesh& mesh )
 {
+
     if (m_Framework->useShader( "color" ))
     {
-        /**
-        m_Framework->computeAncillaryMatrices();
-    */
+        m_Framework->computeAncillaryMatricesRight();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
-        m_Framework->transmitMVP( var_id );
+        m_Framework->transmitMVP(var_id );
+
+        GLint var1 = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
+        glEnableVertexAttribArray( var1 );
+        glVertexAttribPointer( var1, 3, GL_FLOAT, GL_FALSE, 0, &(mesh.m_PositionBuffer[0]) );
+        GLint var2 = glGetAttribLocation( m_Framework->getCurrentShaderId(), "texcoord" );
+        glEnableVertexAttribArray( var2 );
+        glVertexAttribPointer( var2, 2, GL_FLOAT, GL_FALSE, 0, &(mesh.m_Tex2DBuffer[0]) );
+
+         glActiveTexture(GL_TEXTURE);
+         GLint var_id2 = glGetUniformLocation( m_Framework->getCurrentShaderId(),  "tex" );
+         glBindTexture( GL_TEXTURE_2D, mesh.m_TexID );
+         glUniform1i ( var_id2, 0);
+
+         glDrawElements( GL_TRIANGLES, mesh.m_IndexBuffer.size(), GL_UNSIGNED_INT, &(mesh.m_IndexBuffer[0]) );
+
+        //glDisableClientState( GL_NORMAL_ARRAY );
+        //glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+        //glDisableClientState( GL_VERTEX_ARRAY );
+
+        glBindTexture( GL_TEXTURE_2D, 0 );
     }
-    glEnableClientState( GL_VERTEX_ARRAY );
-    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-    glEnableClientState( GL_NORMAL_ARRAY );
-
-    glBindTexture( GL_TEXTURE_2D, mesh.m_TexID );
-    glVertexPointer( 3, GL_FLOAT, 0, &(mesh.m_PositionBuffer[0]) );
-    glNormalPointer( GL_FLOAT, 0, &(mesh.m_NormalBuffer[0]) );
-    glTexCoordPointer( 2, GL_FLOAT, 0, &(mesh.m_Tex2DBuffer[0]) );
-
-    glDrawElements( GL_TRIANGLES, mesh.m_IndexBuffer.size(), GL_UNSIGNED_INT, &(mesh.m_IndexBuffer[0]) );
-
-    glDisableClientState( GL_NORMAL_ARRAY );
-    glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-    glDisableClientState( GL_VERTEX_ARRAY );
-
-    glBindTexture( GL_TEXTURE_2D, 0 );
 }
 
 void MD5Model::RenderNormals(  const Mesh& mesh )
 {
-    if (m_Framework->useShader( "color" ))
-    {
-        m_Framework->computeAncillaryMatrices();
-        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
-        m_Framework->transmitMVP( var_id );
-    }
     glPushAttrib( GL_ENABLE_BIT );
     glDisable( GL_LIGHTING );
-
     glColor3f( 1.0f, 1.0f, 0.0f );// Yellow
-
     glBegin( GL_LINES );
     {
         for ( unsigned int i = 0; i < mesh.m_PositionBuffer.size(); ++i )
         {
             glm::vec3 p0 = mesh.m_PositionBuffer[i];
             glm::vec3 p1 = ( mesh.m_PositionBuffer[i] + mesh.m_NormalBuffer[i] );
-
             glVertex3fv( glm::value_ptr(p0) );
             glVertex3fv( glm::value_ptr(p1) );
         }
     }
     glEnd();
-
     glPopAttrib();
 }
 
-
 void MD5Model::RenderSkeleton( const JointList& joints )
 {
-/**
-    if (m_Framework->useShader( "color" ))
-    {
-        m_Framework->computeAncillaryMatrices();
-        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
-        m_Framework->transmitMVP( var_id );
-    }*/
     glPointSize( 5.0f );
-    glColor3f( 1.0f, 0.0f, 0.0f );
-
-    glPushAttrib( GL_ENABLE_BIT );
 
     glDisable(GL_LIGHTING );
     glDisable( GL_DEPTH_TEST );
 
-    // Draw the joint positions
+    //Draw the joint positions
     glBegin( GL_POINTS );
     {
         for ( unsigned int i = 0; i < joints.size(); ++i )
@@ -450,7 +423,8 @@ void MD5Model::RenderSkeleton( const JointList& joints )
     }
     glEnd();
 
-    // Draw the bones
+
+     // Draw the bones
     glColor3f( 0.0f, 1.0f, 0.0f );
     glBegin( GL_LINES );
     {
@@ -466,8 +440,6 @@ void MD5Model::RenderSkeleton( const JointList& joints )
         }
     }
     glEnd();
-
     glPopAttrib();
-
 }
 

@@ -44,6 +44,10 @@ void GlCamera::translateR(GLfloat shift, GLfloat upX, GLfloat upY, GLfloat upZ){
 
 }
 
+void GlCamera::rotate(glm::quat x, glm::quat y){
+    m_Orientation = y*x*m_Orientation*glm::inverse(x)*glm::inverse(y);
+}
+
 void GlCamera::rotateR(GLfloat angle, GLfloat upX, GLfloat upY, GLfloat upZ){
     glm::vec3 up = glm::vec3(upX,upY,upZ);
     glm::normalize(up);

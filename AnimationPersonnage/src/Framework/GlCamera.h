@@ -29,6 +29,8 @@ public:
 
     void rotateU(GLfloat angle, GLfloat upX, GLfloat upY, GLfloat upZ);
 
+    void rotate(glm::quat x, glm::quat y);
+
     void setAspectRatio(GLfloat aspectRatio);
 
     void setPlanes(GLfloat nearp, GLfloat farp);

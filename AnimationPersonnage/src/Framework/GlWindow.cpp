@@ -11,6 +11,7 @@
 
 
 #include "GlWindow.h"
+#include "src/Tools/Helpers.h"
 
 
 GlWindow::GlWindow()
@@ -35,6 +36,9 @@ GlWindow::initializeGL()
 void
 GlWindow::timerEvent(QTimerEvent *)
 {
+    static ElapsedTime elapsedTime( 1/30.0f );
+    float fDeltaTime = elapsedTime.GetElapsedTime();
+    updateAnimation(fDeltaTime);
     update();
 }
 
@@ -44,7 +48,6 @@ GlWindow::paintGL()
 {
     // Nettoyage du Color Buffer et du Depth Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     render();
 }
 

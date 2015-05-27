@@ -5,6 +5,8 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/matrix_inverse.hpp>
 #include "src/Shapes/Object3D.h"
+#include "src/Model/MD5Model.h"
+#include "src/Tools/Helpers.h"
 #include "GlCamera.h"
 #include <QMessageBox>
 #include <QDebug>
@@ -45,6 +47,7 @@ GlFramework::init()
         exit(-1);
     }
     Object3D::setFramework( this );
+    MD5Model::setFramework(this);
 }
 
 
@@ -206,7 +209,6 @@ GlFramework::getCurrentShaderId() const
     return m_Shader[m_CurrentShader];
 }
 
-
 void
 GlFramework::transmitMVP( GLuint var_id )
 {
@@ -300,9 +302,17 @@ GlFramework::scaleFramework(GLfloat x, GLfloat y, GLfloat z)
 void
 GlFramework::computeAncillaryMatrices()
 {
-	pModelViewMatrix = pViewMatrix * pModelMatrix;
-    pNormalMatrix = glm::affineInverse( pModelViewMatrix );
-	pMVPMatrix = pProjMatrix * pModelViewMatrix;
+    pModelViewMatrix = (pViewMatrix * pModelMatrix);
+    pNormalMatrix =(glm::affineInverse( pModelViewMatrix ));
+    pMVPMatrix =(pProjMatrix * pModelViewMatrix);
+}
+
+void
+GlFramework::computeAncillaryMatricesRight()
+{
+    pModelViewMatrix = (pViewMatrix * (ComputeRightHandCoordinate(pModelMatrix)));
+    pNormalMatrix =(glm::affineInverse( pModelViewMatrix ));
+    pMVPMatrix =(pProjMatrix * pModelViewMatrix);
 }
 
 

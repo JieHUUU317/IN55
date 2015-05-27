@@ -1,6 +1,8 @@
 #include "Helpers.h"
 #include"boost/filesystem.hpp"
 #include "boost/filesystem/fstream.hpp"
+#include "glm/gtc/matrix_access.hpp"
+#include <iostream>
 
 // Remove the quotes from a string
 void RemoveQuotes( std::string& str )
@@ -21,6 +23,23 @@ int GetFileLength( std::istream& file )
     return length;
 }
 
+glm::mat4 ComputeRightHandCoordinate(glm::mat4 matrix){
+   /** glm::mat4 m = glm::mat4(matrix);
+    glm::vec4 temp = glm::vec4(glm::column(m,1));
+    glm::column(m,1,glm::column(m,2));
+    glm::column(m,2,temp);
+    temp = glm::vec4(glm::row(m,1));
+    glm::row(m,1,glm::row(m,2));
+    glm::row(m,2,temp);
+    return m;
+*/
+    glm::mat4 t = glm::mat4(0.0);
+    t[0][0]=1.0f; t[0][1] =0.0f; t[0][2]=0.0f; t[0][3]=0.0f;
+    t[1][0]=0.0f; t[1][1] =0.0f; t[1][2]=1.0f; t[1][3]=0.0f;
+    t[2][0]=0.0f; t[2][1] =1.0f; t[2][2]=0.0f; t[2][3]=0.0f;
+    t[3][0]=0.0f; t[3][1] =0.0f; t[3][2]=0.0f; t[3][3]=1.0f;
+    return matrix*t;
+}
 void IgnoreLine( std::istream& file, int length )
 {
     file.ignore( length, '\n' );

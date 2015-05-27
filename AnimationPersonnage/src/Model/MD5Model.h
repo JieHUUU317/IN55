@@ -10,7 +10,7 @@
 #include"GL/glew.h"
 #include <vector>
 #include <string>
-class MD5Model:public Object3D
+class MD5Model
 {
 public:
     MD5Model();
@@ -20,16 +20,20 @@ public:
     bool LoadAnim( const std::string& filename );
     void Update( GLfloat fDeltaTime );
     void Render();
-     void drawShape( const char* shader_name );
+
 protected:
+
+    static AbstractFramework* m_Framework;
 
     typedef std::vector<glm::vec3> PositionBuffer;
     typedef std::vector<glm::vec3> NormalBuffer;
+    typedef std::vector<glm::vec3> ColorBuffer;
     typedef std::vector<glm::vec2> Tex2DBuffer;
     typedef std::vector<GLuint> IndexBuffer;
 
-    static AbstractFramework* m_Framework;
-    //To store the data of vertex in the MD5 mesh file
+    /**
+     * To store the data of vertex in the MD5 mesh file
+    */
     struct Vertex
     {
         glm::vec3   m_Pos;
@@ -38,16 +42,20 @@ protected:
         int         m_StartWeight;         //start index of weight
         int         m_WeightCount;       //number of weights associated with this vertex
     };
-    typedef std::vector<Vertex> VertexList;
+    typedef std::vector<Vertex> VertexList; //list of vertex
 
-    //To store the data of triangle (3 vertex) in the MD5 mesh file
+    /**
+     * To store the data of triangle (3 vertex) in the MD5 mesh file
+    */
     struct Triangle
     {
         int             m_Indices[3];
     };
-    typedef std::vector<Triangle> TriangleList;
+    typedef std::vector<Triangle> TriangleList; //list of triangle
 
-    //To store the data of the weight
+    /**
+     * To store the data of the weight
+    */
     struct Weight
     {
         int             m_JointID; //index of joint
@@ -55,20 +63,32 @@ protected:
                                              //joint's orientation and position is applied to the final position
         glm::vec3       m_Pos;
     };
-    typedef std::vector<Weight> WeightList;
+    typedef std::vector<Weight> WeightList; //a list of weight
 
+    /**
+     * To store the data of joints
+     */
     struct Joint
     {
         std::string     m_Name;
         int             m_ParentID;
         glm::vec3       m_Pos;
         glm::quat       m_Orient;
-    };
-    typedef std::vector<Joint> JointList;
 
+    };
+    PositionBuffer  m_JointPositionBuffer;   // Joint position stream
+    ColorBuffer m_JointColorBuffer;             //Joint color buffer
+    IndexBuffer     m_JointIndexBuffer;      //Joint index buffer
+
+    typedef std::vector<Joint> JointList; // a list of joint
+
+    /**
+     * To store the data of mesh
+    */
     struct Mesh
     {
         std::string     m_Shader;
+
         // This vertex list stores the vertices in the bind pose.
         VertexList      m_Verts;
         TriangleList    m_Tris;
@@ -77,13 +97,13 @@ protected:
         // A texture ID for the material
         GLuint          m_TexID;
 
-        // These buffers are used for rendering the animated mesh
+         // These buffers are used for rendering the animated mesh
         PositionBuffer  m_PositionBuffer;   // Vertex position stream
         NormalBuffer    m_NormalBuffer;     // Vertex normals stream
         Tex2DBuffer     m_Tex2DBuffer;      // Texture coordinate set
         IndexBuffer     m_IndexBuffer;      // Vertex index buffer
     };
-    typedef std::vector<Mesh> MeshList;
+    typedef std::vector<Mesh> MeshList; //a list of mesh
 
     // Prepare the mesh for rendering
     // Compute vertex positions and normals
@@ -97,10 +117,9 @@ protected:
 
     // Draw the skeleton of the mesh for debugging purposes.
     void RenderSkeleton( const JointList& joints );
-
     bool CheckAnimation( const MD5Animation& animation ) const;
-private:
 
+private:
     int                 m_iMD5Version;
     int                 m_iNumJoints;
     int                 m_iNumMeshes;
@@ -113,7 +132,6 @@ private:
     MD5Animation        m_Animation;
 
     glm::mat4        m_LocalToWorldMatrix;
-
 };
 
 #endif // MD5MODEL
