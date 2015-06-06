@@ -20,6 +20,9 @@ void ComputeQuatW( glm::quat& quat);
 
 glm::mat4 ComputeRightHandCoordinate(glm::mat4 matrix);
 
+
+glm::vec4 ComputeRightHandCoordinateVector(glm::vec4 vector);
+
 // Helper class to count frame time
 class ElapsedTime
 {

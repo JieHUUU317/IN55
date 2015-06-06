@@ -15,7 +15,6 @@ MD5Animation::MD5Animation()
 , m_fAnimTime( 0 )
 {
 }
-
 bool MD5Animation::LoadAnimation( const std::string& filename )
 {
     if ( !boost::filesystem::exists(filename) )
@@ -251,9 +250,9 @@ void MD5Animation::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const Fra
         const SkeletonJoint& joint1 = skeleton1.m_Joints[i];
 
         finalJoint.m_Parent = joint0.m_Parent;
-        //finalJoint.m_Pos = glm::lerp( joint0.m_Pos, joint1.m_Pos, fInterpolate );
         finalJoint.m_Pos = glm::vec3(joint0.m_Pos*fInterpolate+joint1.m_Pos*(1.0f-fInterpolate));
         finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
+
     }
 }
 

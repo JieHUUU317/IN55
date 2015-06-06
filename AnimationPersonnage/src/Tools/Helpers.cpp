@@ -35,10 +35,28 @@ glm::mat4 ComputeRightHandCoordinate(glm::mat4 matrix){
 */
     glm::mat4 t = glm::mat4(0.0);
     t[0][0]=1.0f; t[0][1] =0.0f; t[0][2]=0.0f; t[0][3]=0.0f;
-    t[1][0]=0.0f; t[1][1] =0.0f; t[1][2]=1.0f; t[1][3]=0.0f;
+    t[1][0]=0.0f; t[1][1] =0.0f; t[1][2]=-1.0f; t[1][3]=0.0f;
     t[2][0]=0.0f; t[2][1] =1.0f; t[2][2]=0.0f; t[2][3]=0.0f;
     t[3][0]=0.0f; t[3][1] =0.0f; t[3][2]=0.0f; t[3][3]=1.0f;
     return matrix*t;
+}
+
+glm::vec4 ComputeRightHandCoordinateVector(glm::vec4 vector){
+   /** glm::mat4 m = glm::mat4(matrix);
+    glm::vec4 temp = glm::vec4(glm::column(m,1));
+    glm::column(m,1,glm::column(m,2));
+    glm::column(m,2,temp);
+    temp = glm::vec4(glm::row(m,1));
+    glm::row(m,1,glm::row(m,2));
+    glm::row(m,2,temp);
+    return m;
+*/
+    glm::mat4 t = glm::mat4(0.0);
+    t[0][0]=1.0f; t[0][1] =0.0f; t[0][2]=0.0f; t[0][3]=0.0f;
+    t[1][0]=0.0f; t[1][1] =0.0f; t[1][2]=-1.0f; t[1][3]=0.0f;
+    t[2][0]=0.0f; t[2][1] =1.0f; t[2][2]=0.0f; t[2][3]=0.0f;
+    t[3][0]=0.0f; t[3][1] =0.0f; t[3][2]=0.0f; t[3][3]=1.0f;
+    return t*vector;
 }
 void IgnoreLine( std::istream& file, int length )
 {
@@ -60,7 +78,7 @@ void ComputeQuatW( glm::quat& quat )
     }
 }
 
-ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.03333f */ )
+ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.01f */ )
 : m_fMaxTimeStep( maxTimeStep )
 , m_fPrevious ( std::clock() / (float)CLOCKS_PER_SEC )
 {}

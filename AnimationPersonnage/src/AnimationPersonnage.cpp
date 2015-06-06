@@ -6,10 +6,12 @@
 #include "Shapes/Cubes.h"
 #include "Shapes/BasisPlan.h"
 #include "Model/MD5Model.h"
+#include "Tools/Helpers.h"
 #include <iostream>
 #include <QApplication>
 #include <QDrag>
 #include <QMimeData>
+#include <GL/glut.h>
 
 GLfloat shiftR = 0.0f;
 GLfloat shiftN = 0.0f;
@@ -25,7 +27,7 @@ BasisPlan* basisPlan;
 TwoColorCube* cube;
 GlCamera* camera;
 MD5Model* g_Model;
-GLfloat g_LighPos[] = { -39.749374, -6.182379, 46.334176, 1.0f };       // This is the position of the 'lamp' joint in the test mesh in object-local space
+
 GLfloat g_LightAmbient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 GLfloat g_LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat g_LightSpecular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -63,17 +65,17 @@ AnimationPersonnage::initializeObjects()
 	// Fond gris
     glClearColor( 0.3f, 0.3f, 0.3f, 1.0f );
     glClearDepth( 1.0f );
-	glEnable( GL_DEPTH_TEST );
+    glEnable( GL_DEPTH_TEST );
     glShadeModel( GL_SMOOTH );
     glEnable( GL_TEXTURE_2D );
+    glEnable( GL_LIGHTING );
+    glEnable( GL_LIGHT0 );
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, g_LightAmbient );
     glLightfv( GL_LIGHT0, GL_DIFFUSE, g_LightDiffuse );
     glLightfv( GL_LIGHT0, GL_SPECULAR, g_LightSpecular );
     glLightf( GL_LIGHT0, GL_CONSTANT_ATTENUATION, g_LighAttenuation0 );
     glLightf( GL_LIGHT0, GL_LINEAR_ATTENUATION, g_LighAttenuation1 );
     glLightf( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, g_LighAttenuation2 );
-    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
-
     // Chargement des shaders
     createShader( "Shaders/color" );
 
@@ -88,7 +90,9 @@ AnimationPersonnage::initializeObjects()
     }
     g_Model->LoadModel( "data/Person/boblampclean.md5mesh" );
     g_Model->LoadAnim( "data/Person/boblampclean.md5anim" );
-	return true;
+
+
+    return true;
 }
 void AnimationPersonnage::updateAnimation(float fDeltaTime){
     g_Model->Update( fDeltaTime );
@@ -108,75 +112,13 @@ AnimationPersonnage::render()
     setPerspective(45.0f,1.0f,1.0f,500.0f);
     // Rendu des objet
     pushMatrix();
-        //basis->draw();
-        basisPlan->draw();
-        glLightfv( GL_LIGHT0, GL_POSITION, g_LighPos );
         pushMatrix();
-        g_Model->Render();
+            rotateFramework(M_PI/2,1.0f,0.0f,0.0f);
+            basisPlan->draw();
         popMatrix();
-/**
-        rotateFramework(rotateAngle,0.0f,1.0f,0.0f);
-        translateFramework( 10.0, 5.0, 0.0 );
-
-        pushMatrix();
-        rotateFramework(-rotateLeg,1.0f,0.0f,0.0f);
-        translateFramework( -1.0, -2.5, 0 );
-        scaleFramework(0.5f,2.5f,0.5f);
-        cube->draw();
-        popMatrix();
-
-        pushMatrix();
-        rotateFramework(rotateLeg,1.0f,0.0f,0.0f);
-        translateFramework( 1.0, -2.5, 0 );
-        scaleFramework(0.5f,2.5f,0.5f);
-        cube->draw();
-        popMatrix();
-
-        translateFramework( 0.0, 5.0, 0 );
-
-        pushMatrix();
-        translateFramework( 0.0, -2.5, 0 );
-        scaleFramework(1.5f,2.5f,1.0f);
-        cube->draw();
-        popMatrix();
-
-        pushMatrix();
-        rotateFramework(rotateLeg,1.0f,0.0f,0.0f);
-        translateFramework( -2.0, -2.0, 0 );
-        scaleFramework(0.5f,2.0f,0.5f);
-        cube->draw();
-        popMatrix();
-
-        pushMatrix();
-        rotateFramework(-rotateLeg,1.0f,0.0f,0.0f);
-        translateFramework( 2.0, -2.0, 0 );
-        scaleFramework(0.5f,2.0f,0.5f);
-        cube->draw();
-        popMatrix();
-
-        translateFramework( 0.0, 1.0, 0 );
-        pushMatrix();
-            rotateFramework(rotateLeg,0.0f,1.0f,0.0f);
-            scaleFramework(1.0f,1.0f,1.0f);
-            cube->draw();
-        popMatrix();
-       */
+        glLightfv( GL_LIGHT0, GL_POSITION, g_Model->getLightPosition());
+            g_Model->Render();
     popMatrix();
-    rotateAngle += 0.5f/10;
-
-    if(rotateLeg>15.0f/40){
-        rotateOrder = false;
-    }
-    if(rotateLeg < -15.0f/40){
-        rotateOrder = true;
-    }
-    if(rotateOrder){
-        rotateLeg += 0.5f/10;
-    }
-    else{
-        rotateLeg -= 0.5f/10;
-    }
-
 }
 
 

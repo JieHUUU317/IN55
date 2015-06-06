@@ -20,6 +20,7 @@ public:
     bool LoadAnim( const std::string& filename );
     void Update( GLfloat fDeltaTime );
     void Render();
+    GLfloat* getLightPosition();
 
 protected:
 
@@ -30,7 +31,6 @@ protected:
     typedef std::vector<glm::vec3> ColorBuffer;
     typedef std::vector<glm::vec2> Tex2DBuffer;
     typedef std::vector<GLuint> IndexBuffer;
-
     /**
      * To store the data of vertex in the MD5 mesh file
     */
@@ -119,11 +119,12 @@ protected:
     void RenderSkeleton( const JointList& joints );
     bool CheckAnimation( const MD5Animation& animation ) const;
 
+
 private:
     int                 m_iMD5Version;
     int                 m_iNumJoints;
     int                 m_iNumMeshes;
-
+    GLfloat             g_LighPos[4];
     bool                m_bHasAnimation;
 
     JointList           m_Joints;

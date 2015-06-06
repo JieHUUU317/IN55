@@ -10,7 +10,12 @@ MD5Model::MD5Model()
 , m_iNumMeshes(0)
 , m_bHasAnimation(false)
 , m_LocalToWorldMatrix(1){
+    g_LighPos[0] = -39.749374;
+    g_LighPos[1] = -6.182379;
+    g_LighPos[2] = 46.334176;
+    g_LighPos[3] = 1.0;
 }
+
 
 AbstractFramework* MD5Model::m_Framework = NULL;
 
@@ -272,6 +277,13 @@ bool MD5Model::PrepareMesh( Mesh& mesh, const MD5Animation::FrameSkeleton& skel 
             const Weight& weight = mesh.m_Weights[vert.m_StartWeight + j];
             const MD5Animation::SkeletonJoint& joint = skel.m_Joints[weight.m_JointID];
 
+            if( joint.m_Parent == 13){
+                g_LighPos[0] = joint.m_Pos.x;
+                g_LighPos[1] = joint.m_Pos.y;
+                g_LighPos[2] = joint.m_Pos.z;
+            }
+
+
             glm::vec3 rotPos = joint.m_Orient * weight.m_Pos;
             pos += ( joint.m_Pos + rotPos ) * weight.m_Bias;
 
@@ -342,49 +354,51 @@ void MD5Model::Update( float fDeltaTime )
 
 void MD5Model::Render()
 {
-    // Render the meshes
-    for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
-    {
-        RenderMesh( m_Meshes[i] );
-    }
 
-    m_Animation.Render();
 
-    for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
+    if (m_Framework->useShader( "color" ))
     {
-        //RenderNormals( m_Meshes[i] );
+        m_Framework->computeAncillaryMatricesRight();
+        GLint mvp_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
+        m_Framework->transmitMVP(mvp_id );
+
+        GLint mv_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MV" );
+        m_Framework->transmitMV(mv_id );
+
+        GLint n_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "N" );
+        m_Framework->transmitNM(n_id );
+
+
+        for ( unsigned int i = 0; i < m_Meshes.size(); ++i )
+        {
+            RenderMesh( m_Meshes[i] );
+        }
     }
 }
 
 void MD5Model::RenderMesh( const Mesh& mesh )
 {
-
-    if (m_Framework->useShader( "color" ))
-    {
-        m_Framework->computeAncillaryMatricesRight();
-        GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
-        m_Framework->transmitMVP(var_id );
-
         GLint var1 = glGetAttribLocation( m_Framework->getCurrentShaderId(), "position" );
         glEnableVertexAttribArray( var1 );
         glVertexAttribPointer( var1, 3, GL_FLOAT, GL_FALSE, 0, &(mesh.m_PositionBuffer[0]) );
+
         GLint var2 = glGetAttribLocation( m_Framework->getCurrentShaderId(), "texcoord" );
         glEnableVertexAttribArray( var2 );
         glVertexAttribPointer( var2, 2, GL_FLOAT, GL_FALSE, 0, &(mesh.m_Tex2DBuffer[0]) );
 
-         glActiveTexture(GL_TEXTURE);
-         GLint var_id2 = glGetUniformLocation( m_Framework->getCurrentShaderId(),  "tex" );
-         glBindTexture( GL_TEXTURE_2D, mesh.m_TexID );
-         glUniform1i ( var_id2, 0);
+        GLint var3 = glGetAttribLocation( m_Framework->getCurrentShaderId(), "normal" );
+        glEnableVertexAttribArray( var3 );
+        glVertexAttribPointer( var3, 3, GL_FLOAT, GL_FALSE, 0, &(mesh.m_NormalBuffer[0]) );
 
-         glDrawElements( GL_TRIANGLES, mesh.m_IndexBuffer.size(), GL_UNSIGNED_INT, &(mesh.m_IndexBuffer[0]) );
 
-        //glDisableClientState( GL_NORMAL_ARRAY );
-        //glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-        //glDisableClientState( GL_VERTEX_ARRAY );
-
+        glActiveTexture(GL_TEXTURE0);
+        GLint tex_id = glGetUniformLocation( m_Framework->getCurrentShaderId(),  "tex" );
+        glBindTexture( GL_TEXTURE_2D, mesh.m_TexID );
+        glUniform1i ( tex_id, 0);
+        glDrawElements( GL_TRIANGLES, mesh.m_IndexBuffer.size(), GL_UNSIGNED_INT, &(mesh.m_IndexBuffer[0]) );
         glBindTexture( GL_TEXTURE_2D, 0 );
-    }
+
+
 }
 
 void MD5Model::RenderNormals(  const Mesh& mesh )
@@ -441,5 +455,9 @@ void MD5Model::RenderSkeleton( const JointList& joints )
     }
     glEnd();
     glPopAttrib();
+}
+
+GLfloat *MD5Model::getLightPosition(){
+    return g_LighPos;
 }
 

@@ -892,6 +892,9 @@ obj\GlFramework.obj: src\Framework\GlFramework.cpp src\Framework\GlFramework.h \
 		include\glm\detail\setup.hpp \
 		include\glm\gtc\matrix_inverse.inl \
 		src\Shapes\Object3D.h \
+		src\Model\MD5Model.h \
+		src\Model\MD5Animation.h \
+		src\Tools\Helpers.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\QMessageBox \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qmessagebox.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qdialog.h \
@@ -1253,7 +1256,20 @@ obj\AnimationPersonnage.obj: src\AnimationPersonnage.cpp src\AnimationPersonnage
 		include\glm\mat4x2.hpp \
 		include\glm\mat4x3.hpp \
 		include\glm\gtc\type_ptr.inl \
-		src\Model\MD5Animation.h
+		src\Model\MD5Animation.h \
+		src\Tools\Helpers.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\QApplication \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qapplication.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QDrag \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\QMimeData \
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtCore\qmimedata.h \
+		include\GL\glut.h
 
 obj\GlWindow.obj: src\Framework\GlWindow.cpp src\Framework\GlWindow.h \
 		src\Framework\GlFramework.h \
@@ -1465,7 +1481,8 @@ obj\GlWindow.obj: src\Framework\GlWindow.cpp src\Framework\GlWindow.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtOpenGL\qtopenglglobal.h \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QSurfaceFormat \
 		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\qsurfaceformat.h \
-		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QKeyEvent
+		C:\Qt\Qt5.4.1\5.4\msvc2010_opengl\include\QtGui\QKeyEvent \
+		src\Tools\Helpers.h
 
 obj\LF_String.obj: src\Tools\LF_String.cpp include\LF_String.h \
 		include\Types.h \
@@ -2832,7 +2849,10 @@ obj\Helpers.obj: src\Tools\Helpers.cpp src\Tools\Helpers.h \
 		include\boost\filesystem\v3\convenience.hpp \
 		include\boost\filesystem\fstream.hpp \
 		include\boost\filesystem\v2\fstream.hpp \
-		include\boost\filesystem\v3\fstream.hpp
+		include\boost\filesystem\v3\fstream.hpp \
+		include\glm\gtc\matrix_access.hpp \
+		include\glm\detail\setup.hpp \
+		include\glm\gtc\matrix_access.inl
 
 ####### Install
 

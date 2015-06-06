@@ -17,7 +17,7 @@
 GlWindow::GlWindow()
 {
     resize(1024, 768);
-    startTimer(30);
+    startTimer(1/60);
 }
 
 GlWindow::~GlWindow()

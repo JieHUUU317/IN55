@@ -109,6 +109,7 @@ protected:
     void InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate );
 
 private:
+
     int m_iMD5Version;
     int m_iNumFrames;
     int m_iNumJoints;

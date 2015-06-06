@@ -302,16 +302,18 @@ GlFramework::scaleFramework(GLfloat x, GLfloat y, GLfloat z)
 void
 GlFramework::computeAncillaryMatrices()
 {
+    pModelMatrix = ComputeRightHandCoordinate(pModelMatrix);
     pModelViewMatrix = (pViewMatrix * pModelMatrix);
-    pNormalMatrix =(glm::affineInverse( pModelViewMatrix ));
+    pNormalMatrix =glm::transpose(glm::affineInverse( pModelViewMatrix ));
     pMVPMatrix =(pProjMatrix * pModelViewMatrix);
 }
 
 void
 GlFramework::computeAncillaryMatricesRight()
 {
-    pModelViewMatrix = (pViewMatrix * (ComputeRightHandCoordinate(pModelMatrix)));
-    pNormalMatrix =(glm::affineInverse( pModelViewMatrix ));
+    pModelMatrix = ComputeRightHandCoordinate(pModelMatrix);
+    pModelViewMatrix = (pViewMatrix * pModelMatrix);
+    pNormalMatrix =(glm::transpose(glm::affineInverse( pModelViewMatrix )));
     pMVPMatrix =(pProjMatrix * pModelViewMatrix);
 }
 

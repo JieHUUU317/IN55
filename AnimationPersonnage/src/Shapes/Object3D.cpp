@@ -16,16 +16,15 @@ Object3D::draw()
 {
     if (m_Framework->useShader( "color" ))
     {
-        m_Framework->computeAncillaryMatrices();
+        m_Framework->computeAncillaryMatricesRight();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
-        GLint var_id2 = glGetUniformLocation( m_Framework->getCurrentShaderId(),  "tex" );
         m_Framework->transmitMVP( var_id );
 
         drawShape( "color" );
     }
     if (m_Framework->useShader( "PerVertexPointSize" ))
     {
-        m_Framework->computeAncillaryMatrices();
+        m_Framework->computeAncillaryMatricesRight();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
         m_Framework->transmitMVP( var_id );
 
@@ -33,7 +32,7 @@ Object3D::draw()
     }
     if (m_Framework->useShader( "Morphing" ))
     {
-        m_Framework->computeAncillaryMatrices();
+        m_Framework->computeAncillaryMatricesRight();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
         m_Framework->transmitMVP( var_id );
 
@@ -47,7 +46,7 @@ Object3D::draw( const char* shader_name )
 {
     if (m_Framework->useShader( shader_name ))
     {
-        m_Framework->computeAncillaryMatrices();
+        m_Framework->computeAncillaryMatricesRight();
         GLint var_id = glGetUniformLocation( m_Framework->getCurrentShaderId(), "MVP" );
         m_Framework->transmitMVP( var_id );
 

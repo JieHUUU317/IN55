@@ -3,7 +3,7 @@ commandline ""
 
 numFrames 140
 numJoints 33
-frameRate 24
+frameRate 50
 numAnimatedComponents 198
 
 hierarchy {
